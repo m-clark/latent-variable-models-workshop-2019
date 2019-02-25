@@ -1,0 +1,18 @@
+digraph Factor  {
+  rankdir=TB;
+  size="8,6";
+  node [fontname="Helvetica" fontsize=14 shape=box, width=2];
+  edge [fontname="Helvetica" fontsize=10];
+V1  [label = "Murder"];
+V2  [label = "Assault"];
+V3  [label = "UrbanPop"];
+V4  [label = "Rape"];
+node [shape=ellipse, width ="1"];
+RC1-> V1 [ label = 0.94 ];
+RC1-> V2 [ label = 0.92 ];
+RC1-> V4 [ label = 0.73 ];
+RC2-> V3 [ label = 0.97 ];
+RC2-> V4 [ label = 0.48 ];
+{ rank=same;
+V1;V2;V3;V4;}{ rank=same;
+RC1;RC2;}}
