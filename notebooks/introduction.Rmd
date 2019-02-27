@@ -24,7 +24,9 @@ library(psych)
 
 ## Data
 
-We'll use the Big Five
+We'll use the Big Five Personality scales. From the help file for bfi...
+
+> 25 personality self report items taken from the International Personality Item Pool (ipip.ori.org) were included as part of the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project. The data from 2800 subjects are included here as a demonstration set for scale construction, factor analysis, and Item Response Theory analysis. Three additional demographic variables (sex, education, and age) are also included.
 
 ```{r}
 library(psych)

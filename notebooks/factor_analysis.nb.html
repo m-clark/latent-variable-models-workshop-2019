@@ -1827,6 +1827,16 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#initialization">Initialization</a></li>
+<li><a href="#single-factor">Single Factor</a><ul>
+<li><a href="#inspect-correlations">Inspect correlations</a></li>
+<li><a href="#factor-model">Factor model</a></li>
+</ul></li>
+<li><a href="#multiple-factors">Multiple Factors</a></li>
+</ul>
+</div>
 
 <!-- rnb-text-begin -->
 <div id="initialization" class="section level2">
@@ -1850,21 +1860,99 @@ $(document).ready(function () {
 </div>
 <div id="single-factor" class="section level2">
 <h2>Single Factor</h2>
+<p>First, the data. For our example we will use only the agreeableness items from the Big Five.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmZpX2FncmVlID0gYmZpICU+JSBcbiAgc2VsZWN0KG1hdGNoZXMoJ0FbMS01XScpKVxuYGBgIn0= -->
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bfi_agree =<span class="st"> </span>bfi <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">'A[1-5]'</span>))</a></code></pre></div>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="inspect-correlations" class="section level3">
+<h3>Inspect correlations</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29yKGJmaV9hZ3JlZSwgdXNlID0gJ3BhaXInKSBcblxuYGBgIn0= -->
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">cor</span>(bfi_agree, <span class="dt">use =</span> <span class="st">'pair'</span>) </a></code></pre></div>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBBMSAgICAgICAgIEEyICAgICAgICAgQTMgICAgICAgICBBNCAgICAgICAgIEE1XG5BMSAgMS4wMDAwMDAwIC0wLjM0MDE5MzIgLTAuMjY1MjQ3MSAtMC4xNDY0MjQ1IC0wLjE4MTQzODNcbkEyIC0wLjM0MDE5MzIgIDEuMDAwMDAwMCAgMC40ODUwOTgwICAwLjMzNTA4NzIgIDAuMzkwMDgzNlxuQTMgLTAuMjY1MjQ3MSAgMC40ODUwOTgwICAxLjAwMDAwMDAgIDAuMzYwNDI4MyAgMC41MDQxNDExXG5BNCAtMC4xNDY0MjQ1ICAwLjMzNTA4NzIgIDAuMzYwNDI4MyAgMS4wMDAwMDAwICAwLjMwNzUzNzNcbkE1IC0wLjE4MTQzODMgIDAuMzkwMDgzNiAgMC41MDQxNDExICAwLjMwNzUzNzMgIDEuMDAwMDAwMFxuIn0= -->
+<pre><code>           A1         A2         A3         A4         A5
+A1  1.0000000 -0.3401932 -0.2652471 -0.1464245 -0.1814383
+A2 -0.3401932  1.0000000  0.4850980  0.3350872  0.3900836
+A3 -0.2652471  0.4850980  1.0000000  0.3604283  0.5041411
+A4 -0.1464245  0.3350872  0.3604283  1.0000000  0.3075373
+A5 -0.1814383  0.3900836  0.5041411  0.3075373  1.0000000</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="factor-model" class="section level3">
+<h3>Factor model</h3>
+<p>Let’s run a factor analysis</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoZmFfYWdyZWUsIHNob3J0ID0gRilcblxuYGBgIn0= -->
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">print</span>(fa_agree, <span class="dt">short =</span> F)</a></code></pre></div>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRmFjdG9yIEFuYWx5c2lzIHVzaW5nIG1ldGhvZCA9ICBtaW5yZXNcbkNhbGw6IGZhKHIgPSBiZmlfYWdyZWVbLCAtMV0pXG5TdGFuZGFyZGl6ZWQgbG9hZGluZ3MgKHBhdHRlcm4gbWF0cml4KSBiYXNlZCB1cG9uIGNvcnJlbGF0aW9uIG1hdHJpeFxuIn0= -->
+<pre><code>Factor Analysis using method =  minres
+Call: fa(r = bfi_agree[, -1])
+Standardized loadings (pattern matrix) based upon correlation matrix</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NCwibnJvdyI6NH0sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERpaXVCaVlHQmdZbUJtWldKZ1lnWXlXWmlBQkNNREN3TW5pSzVnWUdBV0Jva0NhUUV3RFpGZ01kQXpNMEd3emMwUmJCTkxGRFdvQnJJbTV5UVdGd01aQWtpQ0xJN0ZuaUN4ZjBETUIrTGIzN3k1UldqUFhUSDdSL2NrdjdTS2Y3US90N3Q0bmx2RU52dWIzNHFrbyszOTRPb2VDNnQrV3ppeDFQNlc4eG14cnhmazdGOEVLa3ZrWlY2eWY4eHk3Rk5RUWlSYzNRY0dNRUNqR1dGOGRFZm1KZWFtd2h3Sjh6R3piNUFobE1tVVlRUmpsY0pZek1uNXVXakdjQmJsbCt0aE00ckpFYTdmMFJqT01vR3pUQ0VHTWYxSEN5ZXVsTVNTUkwyMElxQ1JrTkJDc1k0OXY2QWtNejhQYUJrVEtNWlkwVFF6RnFFSkNKVG1nUnlYb3B1Y1VacVhyV3RrQUxJQkxBL0J2RkNhQlpVTnNwTVo1akpXcUZsc3FYbnBtWG1wc1BETFNVeEt6WUZ5K0lDaEFBNEV2WUtpekx3U21GZUFvc1Y2SmZrbGlUQjFYTW41T1RBUlNGTDRCd0I2NjFHcW9BSUFBQT09In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["MR1"],"name":[1],"type":["S3: AsIs"],"align":["right"]},{"label":["h2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["u2"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["com"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.64","2":"0.4039126","3":"0.5960874","4":"1","_rn_":"A2"},{"1":"0.77","2":"0.5896120","3":"0.4103880","4":"1","_rn_":"A3"},{"1":"0.49","2":"0.2400956","3":"0.7599044","4":"1","_rn_":"A4"},{"1":"0.64","2":"0.4056669","3":"0.5943331","4":"1","_rn_":"A5"}],"options":{"columns":{"min":{},"max":[10],"total":[4]},"rows":{"min":[10],"max":[10],"total":[4]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgICAgICAgTVIxXG5TUyBsb2FkaW5ncyAgICAxLjY0XG5Qcm9wb3J0aW9uIFZhciAwLjQxXG5cbk1lYW4gaXRlbSBjb21wbGV4aXR5ID0gIDFcblRlc3Qgb2YgdGhlIGh5cG90aGVzaXMgdGhhdCAxIGZhY3RvciBpcyBzdWZmaWNpZW50LlxuXG5UaGUgZGVncmVlcyBvZiBmcmVlZG9tIGZvciB0aGUgbnVsbCBtb2RlbCBhcmUgIDYgIGFuZCB0aGUgb2JqZWN0aXZlIGZ1bmN0aW9uIHdhcyAgMC43OSB3aXRoIENoaSBTcXVhcmUgb2YgIDIyMTguMjhcblRoZSBkZWdyZWVzIG9mIGZyZWVkb20gZm9yIHRoZSBtb2RlbCBhcmUgMiAgYW5kIHRoZSBvYmplY3RpdmUgZnVuY3Rpb24gd2FzICAwIFxuXG5UaGUgcm9vdCBtZWFuIHNxdWFyZSBvZiB0aGUgcmVzaWR1YWxzIChSTVNSKSBpcyAgMC4wMSBcblRoZSBkZiBjb3JyZWN0ZWQgcm9vdCBtZWFuIHNxdWFyZSBvZiB0aGUgcmVzaWR1YWxzIGlzICAwLjAzIFxuXG5UaGUgaGFybW9uaWMgbnVtYmVyIG9mIG9ic2VydmF0aW9ucyBpcyAgMjc2MyB3aXRoIHRoZSBlbXBpcmljYWwgY2hpIHNxdWFyZSAgNy4wOCAgd2l0aCBwcm9iIDwgIDAuMDI5IFxuVGhlIHRvdGFsIG51bWJlciBvZiBvYnNlcnZhdGlvbnMgd2FzICAyODAwICB3aXRoIExpa2VsaWhvb2QgQ2hpIFNxdWFyZSA9ICA5LjkxICB3aXRoIHByb2IgPCAgMC4wMDcgXG5cblR1Y2tlciBMZXdpcyBJbmRleCBvZiBmYWN0b3JpbmcgcmVsaWFiaWxpdHkgPSAgMC45ODlcblJNU0VBIGluZGV4ID0gIDAuMDM4ICBhbmQgdGhlIDkwICUgY29uZmlkZW5jZSBpbnRlcnZhbHMgYXJlICAwLjAxNyAwLjA2MlxuQklDID0gIC01Ljk2XG5GaXQgYmFzZWQgdXBvbiBvZmYgZGlhZ29uYWwgdmFsdWVzID0gMVxuTWVhc3VyZXMgb2YgZmFjdG9yIHNjb3JlIGFkZXF1YWN5ICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTVIxXG5Db3JyZWxhdGlvbiBvZiAocmVncmVzc2lvbikgc2NvcmVzIHdpdGggZmFjdG9ycyAgIDAuODdcbk11bHRpcGxlIFIgc3F1YXJlIG9mIHNjb3JlcyB3aXRoIGZhY3RvcnMgICAgICAgICAgMC43NlxuTWluaW11bSBjb3JyZWxhdGlvbiBvZiBwb3NzaWJsZSBmYWN0b3Igc2NvcmVzICAgICAwLjUxXG4ifQ== -->
+<pre><code>
+                MR1
+SS loadings    1.64
+Proportion Var 0.41
+
+Mean item complexity =  1
+Test of the hypothesis that 1 factor is sufficient.
+
+The degrees of freedom for the null model are  6  and the objective function was  0.79 with Chi Square of  2218.28
+The degrees of freedom for the model are 2  and the objective function was  0 
+
+The root mean square of the residuals (RMSR) is  0.01 
+The df corrected root mean square of the residuals is  0.03 
+
+The harmonic number of observations is  2763 with the empirical chi square  7.08  with prob &lt;  0.029 
+The total number of observations was  2800  with Likelihood Chi Square =  9.91  with prob &lt;  0.007 
+
+Tucker Lewis Index of factoring reliability =  0.989
+RMSEA index =  0.038  and the 90 % confidence intervals are  0.017 0.062
+BIC =  -5.96
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   MR1
+Correlation of (regression) scores with factors   0.87
+Multiple R square of scores with factors          0.76
+Minimum correlation of possible factor scores     0.51</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
 </div>
 <div id="multiple-factors" class="section level2">
 <h2>Multiple Factors</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmZpX3RyaW0gPSBiZmkgJT4lIFxuICBzZWxlY3QobWF0Y2hlcygnQVsxLTVdfE5bMS01XScpKVxuYGBgIn0= -->
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bfi_trim =<span class="st"> </span>bfi <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">'A[1-5]|N[1-5]'</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">bfi_trim =<span class="st"> </span>bfi <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">'A[1-5]|N[1-5]'</span>))</a></code></pre></div>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmFjdG9yIEFuYWx5c2lzIgpvdXRwdXQ6IAogIGh0bWxfbm90ZWJvb2s6IAogICAgY29kZV9mb2xkaW5nOiBub25lCiAgICBoaWdobGlnaHQ6IHB5Z21lbnRzCiAgICB0aGVtZTogc2FuZHN0b25lCmVkaXRvcl9vcHRpb25zOiAKICBjaHVua19vdXRwdXRfdHlwZTogaW5saW5lCi0tLQoKIyMgSW5pdGlhbGl6YXRpb24KClRoaXMgYXNzdW1lcyB0aGUgcHJpb3IgUm1kIGZpbGVzIGhhdmUgYmVlbiBydW4uICBTZWUgdGhlIFJFQURNRSBmaWxlLgoKYGBge3IgbWlzY19mdW5jdGlvbnN9CnNvdXJjZSgnbWlzY19mdW5jdGlvbnMvZnVuY3Rpb25zLlInKQpgYGAKCmBgYHtyIGxvYWRfcGFja2FnZXMsIG1lc3NhZ2U9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHBzeWNoKQpgYGAKCgojIyBTaW5nbGUgRmFjdG9yCiMjIE11bHRpcGxlIEZhY3RvcnMKCmBgYHtyfQpiZmlfdHJpbSA9IGJmaSAlPiUgCiAgc2VsZWN0KG1hdGNoZXMoJ0FbMS01XXxOWzEtNV0nKSkKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmFjdG9yIEFuYWx5c2lzIgpvdXRwdXQ6IAogIGh0bWxfbm90ZWJvb2s6IAogICAgY29kZV9mb2xkaW5nOiBub25lCiAgICBoaWdobGlnaHQ6IHB5Z21lbnRzCiAgICB0aGVtZTogc2FuZHN0b25lCiAgICB0b2M6IHllcwplZGl0b3Jfb3B0aW9uczogCiAgY2h1bmtfb3V0cHV0X3R5cGU6IGlubGluZQotLS0KCiMjIEluaXRpYWxpemF0aW9uCgpUaGlzIGFzc3VtZXMgdGhlIHByaW9yIFJtZCBmaWxlcyBoYXZlIGJlZW4gcnVuLiAgU2VlIHRoZSBSRUFETUUgZmlsZS4KCmBgYHtyIG1pc2NfZnVuY3Rpb25zfQpzb3VyY2UoJ21pc2NfZnVuY3Rpb25zL2Z1bmN0aW9ucy5SJykKYGBgCgpgYGB7ciBsb2FkX3BhY2thZ2VzLCBtZXNzYWdlPUZBTFNFfQpsaWJyYXJ5KHRpZHl2ZXJzZSkKbGlicmFyeShwc3ljaCkKYGBgCgoKIyMgU2luZ2xlIEZhY3RvcgoKRmlyc3QsIHRoZSBkYXRhLiAgRm9yIG91ciBleGFtcGxlIHdlIHdpbGwgdXNlIG9ubHkgdGhlIGFncmVlYWJsZW5lc3MgaXRlbXMgZnJvbSB0aGUgQmlnIEZpdmUuCgpgYGB7ciBhZ3JlZX0KYmZpX2FncmVlID0gYmZpICU+JSAKICBzZWxlY3QobWF0Y2hlcygnQVsxLTVdJykpCmBgYAoKCiMjIyBJbnNwZWN0IGNvcnJlbGF0aW9ucwoKYGBge3IgY29yX2FncmVlfQojIG5vdGUgaG93IEExIGlzIG5lZ2F0aXZlbHkgc2NvcmVkCmNvcihiZmlfYWdyZWUsIHVzZSA9ICdwYWlyJykgCmBgYAoKIyMjIEZhY3RvciBtb2RlbAoKTGV0J3MgcnVuIGEgZmFjdG9yIGFuYWx5c2lzCgpgYGB7ciBmYV9hZ3JlZX0KZmFfYWdyZWUgPSBmYShiZmlfYWdyZWUpCnByaW50KGZhX2FncmVlLCBzaG9ydCA9IEYpCmBgYAoKCiMjIE11bHRpcGxlIEZhY3RvcnMKCmBgYHtyfQpiZmlfdHJpbSA9IGJmaSAlPiUgCiAgc2VsZWN0KG1hdGNoZXMoJ0FbMS01XXxOWzEtNV0nKSkKYGBgCgo=</div>
 
 
 

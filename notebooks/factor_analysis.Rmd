@@ -5,6 +5,7 @@ output:
     code_folding: none
     highlight: pygments
     theme: sandstone
+    toc: yes
 editor_options: 
   chunk_output_type: inline
 ---
@@ -24,6 +25,32 @@ library(psych)
 
 
 ## Single Factor
+
+First, the data.  For our example we will use only the agreeableness items from the Big Five.
+
+```{r agree}
+bfi_agree = bfi %>% 
+  select(matches('A[1-5]'))
+```
+
+
+### Inspect correlations
+
+```{r cor_agree}
+# note how A1 is negatively scored
+cor(bfi_agree, use = 'pair') 
+```
+
+### Factor model
+
+Let's run a factor analysis
+
+```{r fa_agree}
+fa_agree = fa(bfi_agree)
+print(fa_agree, short = F)
+```
+
+
 ## Multiple Factors
 
 ```{r}
