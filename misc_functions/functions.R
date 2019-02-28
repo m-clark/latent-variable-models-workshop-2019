@@ -75,3 +75,4 @@ theme_trueMinimal = function(font_size = 12,
     plot.background = ggplot2::element_rect(fill = "transparent", colour = NA)
   )
 }
+
