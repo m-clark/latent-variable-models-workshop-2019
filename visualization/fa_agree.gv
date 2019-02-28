@@ -1,0 +1,17 @@
+digraph Factor  {
+  rankdir=TB;
+  size="8,6";
+  node [fontname="Helvetica" fontsize=14 shape=box, width=2];
+  edge [fontname="Helvetica" fontsize=10];
+V1  [label = "A2"];
+V2  [label = "A3"];
+V3  [label = "A4"];
+V4  [label = "A5"];
+node [shape=ellipse, width ="1"];
+MR1-> V1 [ label = 0.64 ];
+MR1-> V2 [ label = 0.77 ];
+MR1-> V3 [ label = 0.49 ];
+MR1-> V4 [ label = 0.64 ];
+{ rank=same;
+V1;V2;V3;V4;}{ rank=same;
+MR1;}}

@@ -26,7 +26,7 @@ library(psych)
 
 ## Single Factor
 
-First, the data.  For our example we will use only the agreeableness items from the Big Five.
+First, the data.  For our example we will use only the **agreeableness** items from the Big Five.
 
 ```{r agree}
 bfi_agree = bfi %>% 
@@ -38,16 +38,36 @@ bfi_agree = bfi %>%
 
 ```{r cor_agree}
 # note how A1 is negatively scored
-cor(bfi_agree, use = 'pair') 
+cor_agree = cor(bfi_agree, use = 'pair')
+
+cor_agree
+
+cor_agree %>% 
+  corPlot()
 ```
 
 ### Factor model
 
-Let's run a factor analysis
+Let's run a factor analysis.  These items should belong to a single factor, so that's the model we'll run (default for `fa` is one factor).  
+
+There are two parts to the output.  We will concern ourselves with the loadings first (`MR1`).  Conceptually they tell us how the observed variables are correlated with the latent variable.  The `h2` is the square of that, and is like the R^2^ for that variable, i.e. how much of its observed variance is accounted for by the latent.  The `u2` is the **uniqueness**, or how much is not explained (1 - `h2`).
 
 ```{r fa_agree}
 fa_agree = fa(bfi_agree)
 print(fa_agree, short = F)
+```
+
+A simple diagram explains the model and its result.
+
+```{r fa_agree_vis}
+fa.diagram(fa_agree)
+fa.graph(fa_agree, 
+         rank.direction = 'TB', 
+          
+         simple = F,
+         digits = 2,
+         out.file = 'visualization/fa_agree.gv')
+DiagrammeR::grViz('visualization/fa_agree.gv')
 ```
 
 
