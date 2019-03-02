@@ -11,7 +11,6 @@ editor_options:
 
 ## Initialization
 
-This assumes the prior Rmd files have been run.  See the README file.
 
 ```{r misc_functions}
 source('misc_functions/functions.R')
@@ -22,25 +21,33 @@ library(tidyverse)
 library(psych)
 ```
 
-## Data
+## Introduction
 
-We'll use the Big Five Personality scales. From the help file for bfi...
+Factor analysis and related techniques can, in one sense, be seen as dimension reduction tools where we start with data of some dimension (number of variables) and create something that represents the data approximately but with (typically far) fewer variables.  For example, we might have 20 observed variables to begin with and approximate them with only two.
 
-> 25 personality self report items taken from the International Personality Item Pool (ipip.ori.org) were included as part of the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project. The data from 2800 subjects are included here as a demonstration set for scale construction, factor analysis, and Item Response Theory analysis. Three additional demographic variables (sex, education, and age) are also included.
+In another sense, factor analysis allows us to explore the latent structure underlying the observed variables in question, and understand the measurement error associated with them.  We will look at both uses of factor analysis, but among other practical uses includes developing psychological scales, making movie recommendations, discovering themes in text, and more.
 
-```{r}
-library(psych)
-bfi_trim = bfi %>% 
-  select(matches('A[1-5]|N[1-5]'))
-```
 
-```{r}
+## Dimension Reduction
+
+Our first example uses the `USArrests` data from base R.  It contains four variables:
+
+> This data set contains statistics, in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas.
+
+So it has *four* variables, but let's say that we would like to represent it with only *two*.  We will use **principal components analysis** for this, via the `principal` function from the `psych` package.
+
+The output will come in two parts.  Start with the second.  It contains loadings for the two components, as well as other metrics we'll discuss in detail later.  The `components` are the reduced representation, while the `loadings` tell us how much the observed variables correlate with those components.  The basic interpretation is that the crime variables go with one component, while `population` is more or less on its own. 
+
+The first part contains information that tells us more about the model as a whole, such as how much variance in the observed variables is explained by the components.
+
+```{r pca_intro}
 pc_result = principal(USArrests, nfactors = 2)
 pc_result
 ```
 
+For more complex models/variables, it is best to visualize the result.
 
-```{r}
+```{r pca_vis}
 fa.diagram(pc_result)
 fa.graph(pc_result, 
          rank.direction = 'TB', 
@@ -50,3 +57,63 @@ fa.graph(pc_result,
 DiagrammeR::grViz('visualization/pca_intro.gv')
 ```
 
+
+
+We can also get the component scores for each observation.  For example, Alabama is relatively high on the first component (the mean is zero), 
+
+```{r pca_scores}
+pc_result$scores %>% 
+  head(10)
+```
+
+## Measurement of a Latent Construct
+
+Now we will switch gears, and have as a primary goal to try to understand the underlying structure of the data.  To begin, we'll use the [Big Five Personality](https://en.wikipedia.org/wiki/Big_Five_personality_traits) scales. From the help file for bfi...
+
+> 25 personality self report items taken from the International Personality Item Pool (ipip.ori.org) were included as part of the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project. The data from 2800 subjects are included here as a demonstration set for scale construction, factor analysis, and Item Response Theory analysis. Three additional demographic variables (sex, education, and age) are also included.
+
+The five personality dimensions:
+
+- **agreeableness**: a tendency to be compassionate and cooperative rather than suspicious and antagonistic towards others
+- **conscientiousness**: a tendency to be organized and dependable, show self-discipline, planning
+- **openness to experience**: appreciation for art, emotion, adventure, unusual ideas, curiosity, and variety of experience.
+- **extraversion**:  energy, assertiveness, sociability and the tendency to seek stimulation in the company of others, and talkativeness.
+- **neuroticism**:  prone to physiological stress, tendency to experience unpleasant emotions easily, such as anger, anxiety, depression, and vulnerability
+
+This data comes with the `psych` package.  We'll reduce it for our purposes here.  We will look at agreeableness and neuroticism.  
+
+```{r fa_data}
+bfi_trim = bfi %>% 
+  select(matches('A[1-5]|N[1-5]'))
+```
+
+By design, there should be two factors here, so that's what we'll look for.
+
+```{r fa_intro}
+fa_result = fa(bfi_trim, nfactors = 2)
+print(fa_result)
+```
+
+The results are just like those with the PCA, though we do get a few more fit measures. What makes the `psych` package unique is that it provides a lot of the fit indices you'd find in SEM, making it easy to move from exploratory output to more substantively driven models.  
+
+Again, visualization makes things clearer. In the plot, 
+
+```{r fa_vis}
+fa.diagram(fa_result)
+```
+
+We can see that some items load on their respective factors better than others, but in general we get what we would expect.  The neuroticism items load most strongly with a single factor, while the aggreableness ones stick together with another.  The fact that one of the items was reverse scored doesn't affect anything other than producing a negative loading for that factor.
+
+Unlike PCA, we also get an estimate of the correlation of these latent constructs.  The following pulls it out from the printed result.
+
+```{r fa_cor}
+fa_result$Phi
+```
+
+As we'd expect, these would be negatively correlated. In this case though, not very strongly.
+
+## Key Ideas
+
+- Dimension reduction
+- Interpretation of `factors`
+- Correlation of observables with latents
