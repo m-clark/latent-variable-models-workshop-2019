@@ -14,10 +14,161 @@ editor_options:
 This assumes the prior Rmd files have been run.  See the README file.
 
 ```{r misc_functions}
-source('misc_functions/functions.R')
+source('functions_scripts/functions.R')
 ```
 
 ```{r load_packages, message=FALSE}
 library(tidyverse)
 library(psych)
 ```
+
+## Introduction
+
+Principal components analysis (PCA) is the most widely used technique for dimension reduction. With PCA, we seek to find orthogonal (i.e. uncorrelated) factors that will maximize the variance accounted for by each factor.  For some data, $X$ is the $NxD$ matrix of $N$ observations of $D$ variables.  We decompose our original observed data $X$ into two matrices - $F$ are the $N x L$ factor/component scores where $L <= D$, while $\Lambda$ are the $DxL$ weights, typically referred to as the `factor loading` matrix.
+
+$$X = F\Lambda'$$
+
+Alternatively, we can think of reconstructing the correlation matrix.  In this case, the correlation matrix $R$ can be perfectly reconstructed with by the loading matrix.
+
+$$ R = \Lambda\Lambda'$$
+
+## Data
+
+The MNIST data set contains 28 by 28 pixel images of the digits 0-9. If we *unroll* the data to 784 columns, each row represents a single digit, with each entry the gray-scale value. We can see in the following how well we can reconstruct a digit via PCA. 
+
+```{r pca_data}
+load('data/threes_mnist.RData')
+
+show_digit(threes[10, ])
+```
+
+For this PCA, we are only interested in dimension reduction, not interpretation. 
+
+```{r pca_threes_2comp}
+pca_threes_2comp = princomp(threes) # base R PCA function
+```
+
+Now we'll use scores and loadings from the first n_comp components to reconstruct the data. Even with only two components we can get a sense of what we’re looking at. 
+
+```{r pca_threes_2comp_recon}
+which_digit = 10  # which observation to reconstruct?
+n_comp = 2        # how many components to use in reconstruction
+
+recon = tcrossprod(pca_threes_2comp$scores[ , 1:n_comp], 
+                   pca_threes_2comp$loadings[ , 1:n_comp])
+
+scores = sweep(recon, 2, FUN = '+', pca_threes_2comp$center)
+
+show_digit(scores[which_digit, ], 
+           main = paste0('N factors = ', n_comp), 
+           # col = viridis::viridis(500, begin = 0, end = 1),
+           xaxt='n',
+           yaxt='n')
+```
+
+With all components, the reconstruction is perfect.
+
+```{r pca_full_recon}
+n_comp = ncol(threes)
+
+recon = tcrossprod(pca_threes_2comp$scores[ ,1:n_comp], 
+                   pca_threes_2comp$loadings[ ,1:n_comp])
+
+scores = sweep(recon, 2, FUN = '+', pca_threes_2comp$center)
+
+show_digit(scores[which_digit, ], 
+           main = paste0('N factors = ', n_comp), 
+           # col = viridis::viridis(500, begin = 0, end = 1),
+           xaxt='n',
+           yaxt='n')
+```
+
+
+## Exercise
+
+Use PCA via the `psych` package `principal` function on the `state.77` data in base R.  Interpret the results.  PCA by definition has as many components as variables, but you can choose to look at only a subset. The following code retains 2 components for inspection.
+
+When doing PCA, you will often have data at very different scales.  For the `principal` function this actually doesn't matter, as it uses the correlation matrix and a rotated solution anyway. However, you should be in the habit of scaling the variables beforehand so that if you use other packages, you won't have problems.  Otherwise, your components will simply reflect the variance of the observed variables.
+
+```{r pca_state}
+?state.x77
+state_sc = scale(state.x77)
+state_pc_2 = principal(state_sc, 2)
+state_pc_2
+```
+
+Let's see where states align on the components via their component scores for the first two components, use your solution of choice for the following visualization.  Coloring by `state.region` might provide some clues.  Depending on which solution you use, you may need to change the limits for a better depiction.
+
+```{r pca_state_vis_scores}
+state_pc_2$scores %>% 
+  as_tibble(rownames = 'state') %>% 
+  ggplot(aes(x=RC1, y=RC2)) +  # if rotation = 'none' change to PC1/2
+  geom_hline(yintercept = 0, color = 'gray50') +
+  geom_vline(xintercept = 0, color = 'gray50') +
+  geom_text(aes(label=state, color=state.region), size=2, show.legend = F) +
+  lims(x = c(-2.5, 2.5), y = c(-3, 5)) +
+  theme_trueMinimal()
+```
+
+Visualizing the variance explained retaining all components may help us figure out how many components to keep, but there are no obvious rules here.  But for starters, we can see that very little additional variance is explained by the fifth component, and roughly 90% of the variance is accounted for by the first four.
+
+```{r exercise_visual}
+set.seed(1234)
+state_pc_all = principal(state_sc, ncol(state_sc), rotate = 'none')
+
+plot_dat = tibble(
+  explained = state_pc_all$Vaccounted['Proportion Var',],
+  cumulative = state_pc_all$Vaccounted['Cumulative Var',],
+  components = 1:ncol(state_sc)
+)
+
+plot_dat %>% 
+  ggplot(aes(components, explained)) +
+  geom_point() +
+  geom_line()
+
+plot_dat %>% 
+  ggplot(aes(components, cumulative)) +
+  geom_point() +
+  geom_line()
+```
+
+As an aside, we can see the correlation matrix perfectly reconstructed by PCA.
+
+```{r cor_recon}
+all.equal(tcrossprod(loadings(state_pc_all)), cor(state.x77))
+```
+
+
+
+Given our results, let's look at the four component solution and see how we might interpret it.
+
+```{r pca_state_4}
+state_pc_4 = principal(state_sc, 4)
+state_pc_4
+```
+
+Let's visualize component 1 vs. 4, but you can look at any you want.
+
+```{r pca_state_4_vis_scores}
+state_pc_4$scores %>% 
+  as_tibble(rownames = 'state') %>% 
+  ggplot(aes(x=RC1, y=RC4)) +  # if rotation = 'none' change to PC*
+  geom_hline(yintercept = 0, color = 'gray50') +
+  geom_vline(xintercept = 0, color = 'gray50') +
+  geom_text(aes(label=state, color=state.region), size=2, show.legend = F) +
+  lims(x = c(-2.5, 2.5), y = c(-3, 5)) +
+  theme_trueMinimal()
+```
+
+
+A final note. Some have a goal of doing cluster analysis after PCA using the PC scores.  This has always struck me as odd.  With PCA you have a nice continuous expression along multiple dimensions, and collapsing it down to a couple of categories would likely be disastrous for further modeling purposes.
+
+```{r pca_contour}
+state_pc_4$scores %>% 
+  as_tibble(rownames = 'state') %>% 
+  ggplot(aes(x=RC1, y=RC4)) +
+  geom_density_2d(aes()) +
+  geom_text(aes(label=state), size=2)
+```
+

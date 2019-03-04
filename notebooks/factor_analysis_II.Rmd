@@ -26,16 +26,18 @@ library(lavaan)
 
 # SEM
 
+Structural Equation Modeling takes a more structured approach to modeling observed and latent variables, often simultaneously, and including indirect effects, multiple outcomes in more.  
+
 ## CFA
 
+We can take a first step into the SEM by sticking with standard factor analysis.  In our very first example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge
+
 ```{r}
-
-
 modelCode = "
   agree =~ A2 + A1 + A3 + A4 + A5
   neurot =~ N1 + N2 + N3 + N4 + N5
 
-  # not necessary
+  # specify correlated factors; not necessary
   # agree ~~ neurot
 
   # if you don't want them correlated

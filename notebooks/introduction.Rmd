@@ -13,7 +13,7 @@ editor_options:
 
 
 ```{r misc_functions}
-source('misc_functions/functions.R')
+source('functions_scripts/functions.R')
 ```
 
 ```{r load_packages, message=FALSE}

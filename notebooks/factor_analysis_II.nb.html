@@ -1841,37 +1841,100 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHBzeWNoKVxubGlicmFyeShsYXZhYW4pXG5gYGAifQ== -->
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(psych)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(lavaan)</a></code></pre></div>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
 <div id="sem" class="section level1">
 <h1>SEM</h1>
+<p>Structural Equation Modeling takes a more structured approach to modeling observed and latent variables, often simultaneously, and including indirect effects, multiple outcomes in more.</p>
 <div id="cfa" class="section level2">
 <h2>CFA</h2>
+<p>We can take a first step into the SEM by sticking with standard factor analysis. In our very first example we did a factor analysis for two factors of the BFI. We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbm1vZGVsQ29kZSA9IFwiXG4gIGFncmVlID1+IEEyICsgQTEgKyBBMyArIEE0ICsgQTVcbiAgbmV1cm90ID1+IE4xICsgTjIgKyBOMyArIE40ICsgTjVcblxuICAjIG5vdCBuZWNlc3NhcnlcbiAgIyBhZ3JlZSB+fiBuZXVyb3RcblxuICAjIGlmIHlvdSBkb24ndCB3YW50IHRoZW0gY29ycmVsYXRlZFxuICAjIGFncmVlIH5+IDAqbmV1cm90XG5cIlxuXG5jZmFfbW9kZWwgPSBjZmEobW9kZWxDb2RlLCBkYXRhPWJmaV90cmltKVxuc3VtbWFyeShjZmFfbW9kZWwsIHN0YW5kYXJkaXplZD1ULCByc3E9VCwgbmQ9MilcbmBgYCJ9 -->
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">modelCode =<span class="st"> &quot;</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  agree =~ A2 + A1 + A3 + A4 + A5</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  neurot =~ N1 + N2 + N3 + N4 + N5</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">  # not necessary</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="st">  # agree ~~ neurot</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="st">  # if you don't want them correlated</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">  # agree ~~ 0*neurot</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">cfa_model =<span class="st"> </span><span class="kw">cfa</span>(modelCode, <span class="dt">data=</span>bfi_trim)</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw">summary</span>(cfa_model, <span class="dt">standardized=</span>T, <span class="dt">rsq=</span>T, <span class="dt">nd=</span><span class="dv">2</span>)</a></code></pre></div>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxDb2RlID0gXCJcbiAgYWdyZWUgPX4gQTIgKyBBMSArIEEzICsgQTQgKyBBNVxuICBuZXVyb3QgPX4gTjEgKyBOMiArIE4zICsgTjQgKyBONVxuXG4gICMgc3BlY2lmeSBjb3JyZWxhdGVkIGZhY3RvcnM7IG5vdCBuZWNlc3NhcnlcbiAgIyBhZ3JlZSB+fiBuZXVyb3RcblxuICAjIGlmIHlvdSBkb24ndCB3YW50IHRoZW0gY29ycmVsYXRlZFxuICAjIGFncmVlIH5+IDAqbmV1cm90XG5cIlxuXG5jZmFfbW9kZWwgPSBjZmEobW9kZWxDb2RlLCBkYXRhPWJmaV90cmltKVxuc3VtbWFyeShjZmFfbW9kZWwsIHN0YW5kYXJkaXplZD1ULCByc3E9VCwgbmQ9MilcbmBgYCJ9 -->
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">modelCode =<span class="st"> &quot;</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  agree =~ A2 + A1 + A3 + A4 + A5</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  neurot =~ N1 + N2 + N3 + N4 + N5</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  # specify correlated factors; not necessary</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">  # agree ~~ neurot</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="st">  # if you don't want them correlated</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="st">  # agree ~~ 0*neurot</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">cfa_model =<span class="st"> </span><span class="kw">cfa</span>(modelCode, <span class="dt">data=</span>bfi_trim)</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="kw">summary</span>(cfa_model, <span class="dt">standardized=</span>T, <span class="dt">rsq=</span>T, <span class="dt">nd=</span><span class="dv">2</span>)</a></code></pre></div>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoibGF2YWFuIDAuNi0zIGVuZGVkIG5vcm1hbGx5IGFmdGVyIDMzIGl0ZXJhdGlvbnNcblxuICBPcHRpbWl6YXRpb24gbWV0aG9kICAgICAgICAgICAgICAgICAgICAgICAgICAgTkxNSU5CXG4gIE51bWJlciBvZiBmcmVlIHBhcmFtZXRlcnMgICAgICAgICAgICAgICAgICAgICAgICAgMjFcblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBVc2VkICAgICAgIFRvdGFsXG4gIE51bWJlciBvZiBvYnNlcnZhdGlvbnMgICAgICAgICAgICAgICAgICAgICAgICAgIDI2MTggICAgICAgIDI4MDBcblxuICBFc3RpbWF0b3IgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1MXG4gIE1vZGVsIEZpdCBUZXN0IFN0YXRpc3RpYyAgICAgICAgICAgICAgICAgICAgIDY5NC42MjBcbiAgRGVncmVlcyBvZiBmcmVlZG9tICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzNFxuICBQLXZhbHVlIChDaGktc3F1YXJlKSAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwXG5cblBhcmFtZXRlciBFc3RpbWF0ZXM6XG5cbiAgSW5mb3JtYXRpb24gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFeHBlY3RlZFxuICBJbmZvcm1hdGlvbiBzYXR1cmF0ZWQgKGgxKSBtb2RlbCAgICAgICAgICBTdHJ1Y3R1cmVkXG4gIFN0YW5kYXJkIEVycm9ycyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU3RhbmRhcmRcblxuTGF0ZW50IFZhcmlhYmxlczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KSAgIFN0ZC5sdiAgU3RkLmFsbFxuICBhZ3JlZSA9fiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgQTIgICAgICAgICAgICAgICAgIDEuMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuNzcgICAgIDAuNjVcbiAgICBBMSAgICAgICAgICAgICAgICAtMC43MSAgICAgMC4wNCAgIC0xNi41MyAgICAgMC4wMCAgICAtMC41NCAgICAtMC4zOVxuICAgIEEzICAgICAgICAgICAgICAgICAxLjMwICAgICAwLjA1ICAgIDI2LjQzICAgICAwLjAwICAgICAwLjk5ICAgICAwLjc2XG4gICAgQTQgICAgICAgICAgICAgICAgIDAuOTUgICAgIDAuMDUgICAgMjAuMTUgICAgIDAuMDAgICAgIDAuNzMgICAgIDAuNDlcbiAgICBBNSAgICAgICAgICAgICAgICAgMS4wNiAgICAgMC4wNCAgICAyNC43NCAgICAgMC4wMCAgICAgMC44MSAgICAgMC42NFxuICBuZXVyb3QgPX4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgTjEgICAgICAgICAgICAgICAgIDEuMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDEuMjkgICAgIDAuODJcbiAgICBOMiAgICAgICAgICAgICAgICAgMC45NSAgICAgMC4wMiAgICA0MC43OSAgICAgMC4wMCAgICAgMS4yMyAgICAgMC44MFxuICAgIE4zICAgICAgICAgICAgICAgICAwLjg4ICAgICAwLjAyICAgIDM2LjU3ICAgICAwLjAwICAgICAxLjE0ICAgICAwLjcxXG4gICAgTjQgICAgICAgICAgICAgICAgIDAuNjggICAgIDAuMDIgICAgMjcuODUgICAgIDAuMDAgICAgIDAuODggICAgIDAuNTZcbiAgICBONSAgICAgICAgICAgICAgICAgMC42MyAgICAgMC4wMyAgICAyNC41OSAgICAgMC4wMCAgICAgMC44MSAgICAgMC41MFxuXG5Db3ZhcmlhbmNlczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KSAgIFN0ZC5sdiAgU3RkLmFsbFxuICBhZ3JlZSB+fiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgbmV1cm90ICAgICAgICAgICAgLTAuMjIgICAgIDAuMDMgICAgLTguNjYgICAgIDAuMDAgICAgLTAuMjIgICAgLTAuMjJcblxuVmFyaWFuY2VzOlxuICAgICAgICAgICAgICAgICAgIEVzdGltYXRlICBTdGQuRXJyICB6LXZhbHVlICBQKD58enwpICAgU3RkLmx2ICBTdGQuYWxsXG4gICAuQTIgICAgICAgICAgICAgICAgIDAuODAgICAgIDAuMDMgICAgMjcuNjAgICAgIDAuMDAgICAgIDAuODAgICAgIDAuNThcbiAgIC5BMSAgICAgICAgICAgICAgICAgMS42NyAgICAgMC4wNSAgICAzNC4yMSAgICAgMC4wMCAgICAgMS42NyAgICAgMC44NVxuICAgLkEzICAgICAgICAgICAgICAgICAwLjczICAgICAwLjA0ICAgIDIwLjYxICAgICAwLjAwICAgICAwLjczICAgICAwLjQyXG4gICAuQTQgICAgICAgICAgICAgICAgIDEuNjkgICAgIDAuMDUgICAgMzIuNjcgICAgIDAuMDAgICAgIDEuNjkgICAgIDAuNzZcbiAgIC5BNSAgICAgICAgICAgICAgICAgMC45NCAgICAgMC4wMyAgICAyOC4xMSAgICAgMC4wMCAgICAgMC45NCAgICAgMC41OVxuICAgLk4xICAgICAgICAgICAgICAgICAwLjc5ICAgICAwLjA0ICAgIDIyLjA5ICAgICAwLjAwICAgICAwLjc5ICAgICAwLjMyXG4gICAuTjIgICAgICAgICAgICAgICAgIDAuODMgICAgIDAuMDMgICAgMjMuODggICAgIDAuMDAgICAgIDAuODMgICAgIDAuMzVcbiAgIC5OMyAgICAgICAgICAgICAgICAgMS4yNSAgICAgMC4wNCAgICAyOS4zNSAgICAgMC4wMCAgICAgMS4yNSAgICAgMC40OVxuICAgLk40ICAgICAgICAgICAgICAgICAxLjY5ICAgICAwLjA1ICAgIDMzLjI4ICAgICAwLjAwICAgICAxLjY5ICAgICAwLjY5XG4gICAuTjUgICAgICAgICAgICAgICAgIDEuOTcgICAgIDAuMDYgICAgMzQuMDggICAgIDAuMDAgICAgIDEuOTcgICAgIDAuNzVcbiAgICBhZ3JlZSAgICAgICAgICAgICAgMC41OSAgICAgMC4wNCAgICAxNi4xMCAgICAgMC4wMCAgICAgMS4wMCAgICAgMS4wMFxuICAgIG5ldXJvdCAgICAgICAgICAgICAxLjY3ICAgICAwLjA3ICAgIDIzLjcwICAgICAwLjAwICAgICAxLjAwICAgICAxLjAwXG5cblItU3F1YXJlOlxuICAgICAgICAgICAgICAgICAgIEVzdGltYXRlXG4gICAgQTIgICAgICAgICAgICAgICAgIDAuNDJcbiAgICBBMSAgICAgICAgICAgICAgICAgMC4xNVxuICAgIEEzICAgICAgICAgICAgICAgICAwLjU4XG4gICAgQTQgICAgICAgICAgICAgICAgIDAuMjRcbiAgICBBNSAgICAgICAgICAgICAgICAgMC40MVxuICAgIE4xICAgICAgICAgICAgICAgICAwLjY4XG4gICAgTjIgICAgICAgICAgICAgICAgIDAuNjVcbiAgICBOMyAgICAgICAgICAgICAgICAgMC41MVxuICAgIE40ICAgICAgICAgICAgICAgICAwLjMxXG4gICAgTjUgICAgICAgICAgICAgICAgIDAuMjVcbiJ9 -->
+<pre><code>lavaan 0.6-3 ended normally after 33 iterations
+
+  Optimization method                           NLMINB
+  Number of free parameters                         21
+
+                                                  Used       Total
+  Number of observations                          2618        2800
+
+  Estimator                                         ML
+  Model Fit Test Statistic                     694.620
+  Degrees of freedom                                34
+  P-value (Chi-square)                           0.000
+
+Parameter Estimates:
+
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+  Standard Errors                             Standard
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  agree =~                                                              
+    A2                 1.00                                0.77     0.65
+    A1                -0.71     0.04   -16.53     0.00    -0.54    -0.39
+    A3                 1.30     0.05    26.43     0.00     0.99     0.76
+    A4                 0.95     0.05    20.15     0.00     0.73     0.49
+    A5                 1.06     0.04    24.74     0.00     0.81     0.64
+  neurot =~                                                             
+    N1                 1.00                                1.29     0.82
+    N2                 0.95     0.02    40.79     0.00     1.23     0.80
+    N3                 0.88     0.02    36.57     0.00     1.14     0.71
+    N4                 0.68     0.02    27.85     0.00     0.88     0.56
+    N5                 0.63     0.03    24.59     0.00     0.81     0.50
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  agree ~~                                                              
+    neurot            -0.22     0.03    -8.66     0.00    -0.22    -0.22
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .A2                 0.80     0.03    27.60     0.00     0.80     0.58
+   .A1                 1.67     0.05    34.21     0.00     1.67     0.85
+   .A3                 0.73     0.04    20.61     0.00     0.73     0.42
+   .A4                 1.69     0.05    32.67     0.00     1.69     0.76
+   .A5                 0.94     0.03    28.11     0.00     0.94     0.59
+   .N1                 0.79     0.04    22.09     0.00     0.79     0.32
+   .N2                 0.83     0.03    23.88     0.00     0.83     0.35
+   .N3                 1.25     0.04    29.35     0.00     1.25     0.49
+   .N4                 1.69     0.05    33.28     0.00     1.69     0.69
+   .N5                 1.97     0.06    34.08     0.00     1.97     0.75
+    agree              0.59     0.04    16.10     0.00     1.00     1.00
+    neurot             1.67     0.07    23.70     0.00     1.00     1.00
+
+R-Square:
+                   Estimate
+    A2                 0.42
+    A1                 0.15
+    A3                 0.58
+    A4                 0.24
+    A5                 0.41
+    N1                 0.68
+    N2                 0.65
+    N3                 0.51
+    N4                 0.31
+    N5                 0.25</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1884,7 +1947,7 @@ $(document).ready(function () {
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmFjdG9yIEFuYWx5c2lzIgpvdXRwdXQ6IAogIGh0bWxfbm90ZWJvb2s6IAogICAgY29kZV9mb2xkaW5nOiBub25lCiAgICBoaWdobGlnaHQ6IHB5Z21lbnRzCiAgICB0aGVtZTogc2FuZHN0b25lCmVkaXRvcl9vcHRpb25zOiAKICBjaHVua19vdXRwdXRfdHlwZTogaW5saW5lCi0tLQoKIyMgSW5pdGlhbGl6YXRpb24KClRoaXMgYXNzdW1lcyB0aGUgcHJpb3IgUm1kIGZpbGVzIGhhdmUgYmVlbiBydW4uICBTZWUgdGhlIFJFQURNRSBmaWxlLgoKYGBge3IgbWlzY19mdW5jdGlvbnN9CnNvdXJjZSgnbWlzY19mdW5jdGlvbnMvZnVuY3Rpb25zLlInKQpgYGAKCmBgYHtyIGxvYWRfcGFja2FnZXMsIG1lc3NhZ2U9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHBzeWNoKQpsaWJyYXJ5KGxhdmFhbikKYGBgCgoKIyBTRU0KCiMjIENGQQoKYGBge3J9CgoKbW9kZWxDb2RlID0gIgogIGFncmVlID1+IEEyICsgQTEgKyBBMyArIEE0ICsgQTUKICBuZXVyb3QgPX4gTjEgKyBOMiArIE4zICsgTjQgKyBONQoKICAjIG5vdCBuZWNlc3NhcnkKICAjIGFncmVlIH5+IG5ldXJvdAoKICAjIGlmIHlvdSBkb24ndCB3YW50IHRoZW0gY29ycmVsYXRlZAogICMgYWdyZWUgfn4gMCpuZXVyb3QKIgoKY2ZhX21vZGVsID0gY2ZhKG1vZGVsQ29kZSwgZGF0YT1iZmlfdHJpbSkKc3VtbWFyeShjZmFfbW9kZWwsIHN0YW5kYXJkaXplZD1ULCByc3E9VCwgbmQ9MikKYGBgCgoKCiMjIEdyb3d0aCBDdXJ2ZSBNb2RlbAoKIyMgU0VNCgoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmFjdG9yIEFuYWx5c2lzIgpvdXRwdXQ6IAogIGh0bWxfbm90ZWJvb2s6IAogICAgY29kZV9mb2xkaW5nOiBub25lCiAgICBoaWdobGlnaHQ6IHB5Z21lbnRzCiAgICB0aGVtZTogc2FuZHN0b25lCmVkaXRvcl9vcHRpb25zOiAKICBjaHVua19vdXRwdXRfdHlwZTogaW5saW5lCi0tLQoKIyMgSW5pdGlhbGl6YXRpb24KClRoaXMgYXNzdW1lcyB0aGUgcHJpb3IgUm1kIGZpbGVzIGhhdmUgYmVlbiBydW4uICBTZWUgdGhlIFJFQURNRSBmaWxlLgoKYGBge3IgbWlzY19mdW5jdGlvbnN9CnNvdXJjZSgnbWlzY19mdW5jdGlvbnMvZnVuY3Rpb25zLlInKQpgYGAKCmBgYHtyIGxvYWRfcGFja2FnZXMsIG1lc3NhZ2U9RkFMU0V9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHBzeWNoKQpsaWJyYXJ5KGxhdmFhbikKYGBgCgoKIyBTRU0KClN0cnVjdHVyYWwgRXF1YXRpb24gTW9kZWxpbmcgdGFrZXMgYSBtb3JlIHN0cnVjdHVyZWQgYXBwcm9hY2ggdG8gbW9kZWxpbmcgb2JzZXJ2ZWQgYW5kIGxhdGVudCB2YXJpYWJsZXMsIG9mdGVuIHNpbXVsdGFuZW91c2x5LCBhbmQgaW5jbHVkaW5nIGluZGlyZWN0IGVmZmVjdHMsIG11bHRpcGxlIG91dGNvbWVzIGluIG1vcmUuICAKCiMjIENGQQoKV2UgY2FuIHRha2UgYSBmaXJzdCBzdGVwIGludG8gdGhlIFNFTSBieSBzdGlja2luZyB3aXRoIHN0YW5kYXJkIGZhY3RvciBhbmFseXNpcy4gIEluIG91ciB2ZXJ5IGZpcnN0IGV4YW1wbGUgd2UgZGlkIGEgZmFjdG9yIGFuYWx5c2lzIGZvciB0d28gZmFjdG9ycyBvZiB0aGUgQkZJLiAgV2Ugd2lsbCBkbyBzbyBhZ2FpbiBoZXJlLCBidXQgaW5zdGVhZCBvZiBsZXR0aW5nIGV2ZXJ5IG9ic2VydmVkIHZhcmlhYmxlIGxvYWQgb24gZXZlcnkgZmFjdG9yLCB3ZSB3aWxsIHVzZSBvdXIgc3Vic3RhbnRpdmUga25vd2xlZGdlCgpgYGB7cn0KbW9kZWxDb2RlID0gIgogIGFncmVlID1+IEEyICsgQTEgKyBBMyArIEE0ICsgQTUKICBuZXVyb3QgPX4gTjEgKyBOMiArIE4zICsgTjQgKyBONQoKICAjIHNwZWNpZnkgY29ycmVsYXRlZCBmYWN0b3JzOyBub3QgbmVjZXNzYXJ5CiAgIyBhZ3JlZSB+fiBuZXVyb3QKCiAgIyBpZiB5b3UgZG9uJ3Qgd2FudCB0aGVtIGNvcnJlbGF0ZWQKICAjIGFncmVlIH5+IDAqbmV1cm90CiIKCmNmYV9tb2RlbCA9IGNmYShtb2RlbENvZGUsIGRhdGE9YmZpX3RyaW0pCnN1bW1hcnkoY2ZhX21vZGVsLCBzdGFuZGFyZGl6ZWQ9VCwgcnNxPVQsIG5kPTIpCmBgYAoKCgojIyBHcm93dGggQ3VydmUgTW9kZWwKCiMjIFNFTQoKCg==</div>
 
 
 

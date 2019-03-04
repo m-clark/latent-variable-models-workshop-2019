@@ -15,7 +15,7 @@ editor_options:
 This assumes the prior Rmd files have been run.  See the README file.
 
 ```{r misc_functions}
-source('misc_functions/functions.R')
+source('functions_scripts/functions.R')
 ```
 
 ```{r load_packages, message=FALSE}
@@ -31,6 +31,10 @@ First, the data.  For our example we will use only the **agreeableness** items f
 ```{r agree}
 bfi_agree = bfi %>% 
   select(matches('A[1-5]'))
+```
+
+```{r fa_graphical_model}
+DiagrammeR::grViz('functions_scripts/fa_gm.gv')
 ```
 
 
@@ -50,31 +54,83 @@ cor_agree %>%
 
 Let's run a factor analysis.  These items should belong to a single factor, so that's the model we'll run (default for `fa` is one factor).  
 
-There are two parts to the output.  We will concern ourselves with the loadings first (`MR1`).  Conceptually they tell us how the observed variables are correlated with the latent variable.  The `h2` is the square of that, and is like the R^2^ for that variable, i.e. how much of its observed variance is accounted for by the latent.  The `u2` is the **uniqueness**, or how much is not explained (1 - `h2`).
+There are two parts to the output.  We will concern ourselves with the loadings first (`MR1`).  Conceptually they tell us how the observed variables are correlated with the latent variable.  The `h2` is the square of that, called the **communality**, and is like the R^2^ for that variable, i.e. how much of its observed variance is accounted for by the latent.  The `u2` is the **uniqueness**, or how much is not explained (1 - `h2`).  The final value is a measure of **complexity**. A value of 1 might be seen for something that loaded on only one factor, which is all we have here, but otherwise will increase the more the variable loads on multiple factors.
 
 ```{r fa_agree}
 fa_agree = fa(bfi_agree)
-print(fa_agree, short = F)
+fa_agree
 ```
 
 A simple diagram explains the model and its result.
 
 ```{r fa_agree_vis}
 fa.diagram(fa_agree)
-fa.graph(fa_agree, 
-         rank.direction = 'TB', 
-          
-         simple = F,
-         digits = 2,
-         out.file = 'visualization/fa_agree.gv')
-DiagrammeR::grViz('visualization/fa_agree.gv')
+
+# in case you are interested in how to make the graphviz file
+# fa.graph(fa_agree,
+#          rank.direction = 'TB', 
+#          simple = F,
+#          digits = 2,
+#          out.file = 'functions_scripts/fa_agree.gv')
+
+DiagrammeR::grViz('functions_scripts/fa_agree.gv')
 ```
 
+
+## The Latent Linear Model
+
+We can think of a factor analysis for a single variable in terms of just a basic regression model. For each observed variable as a dependent variable we have $\beta_0$ is the intercept and $\lambda$ the regression coefficient that expresses the effect of the latent variable $F$ on the observed variable $X$.
+
+$$X = \beta_0 + \lambda F + \epsilon$$
+
+We will almost always have multiple indicators, and often multiple latent variables.  Some indicators may be associated with multiple factors.
+
+$$\begin{aligned}
+X_1 &= \beta_{01} + \lambda_{11} F_1 + \lambda_{21} F_2  + \epsilon\\
+X_2 &= \beta_{02} + \lambda_{12} F_1 + \lambda_{22} F_2  + \epsilon\\
+X_3 &= \beta_{03} + \lambda_{13} F_1 + \epsilon
+\end{aligned}$$
+
+If we put this in matrix form as we did with PCA, we can see the key difference.  Factor analysis can only approximate the data, because the data is assumed to be measured with error.
+
+$$X \approx F\Lambda'$$
+Now in terms of the correlation matrix.  The $\Psi$ are the uniquenesses, or variance we don't account for.
+
+$$R \approx \Lambda\Lambda' \\
+R = \Lambda\Lambda' + \Psi$$
+
+In terms of the multivariate normal distribution.
+
+$$ X \sim \mathcal{N}(F\Lambda' + \mu, \Psi) $$
+$\mu$ are the intercepts, $\Psi$ is a $DxD$ covariance matrix.
+
+
+#### Probabilistic PCA
+
+$$\Psi = \sigma^2I$$
+
+#### Standard PCA
+
+With standard PCA we are assuming a noiseless process, and constraining $\Lambda$ to be orthogonal.
+
+$$\sigma^2 \rightarrow 0$$
 
 ## Multiple Factors
 
+> 16 multiple choice ability items 1525 subjects taken from the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project are saved as iqitems. Those data are shown as examples of how to score multiple choice tests and analyses of response alternatives. When scored correct or incorrect, the data are useful for demonstrations of tetrachoric based factor analysis irt.fa and finding tetrachoric correlations.
+
 ```{r}
-bfi_trim = bfi %>% 
-  select(matches('A[1-5]|N[1-5]'))
+ability = as_tibble(ability)
+ability
 ```
+```{r}
+fa_ability = fa(ability, 4)
+fa_ability
+```
+
+```{r}
+fa.diagram(fa_ability, sort = F)
+```
+
+
 
