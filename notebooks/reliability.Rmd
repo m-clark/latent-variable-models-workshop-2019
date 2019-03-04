@@ -14,10 +14,11 @@ editor_options:
 This assumes the prior Rmd files have been run.  See the README file.
 
 ```{r misc_functions}
-source('misc_functions/functions.R')
+source('functions_scripts/functions.R')
 ```
 
 ```{r load_packages, message=FALSE}
 library(tidyverse)
 library(psych)
+library(semTools)  # for semTools::reliability
 ```

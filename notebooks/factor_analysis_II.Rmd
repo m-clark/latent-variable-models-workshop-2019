@@ -9,32 +9,37 @@ editor_options:
   chunk_output_type: inline
 ---
 
+
 ## Initialization
 
 This assumes the prior Rmd files have been run.  See the README file.
 
 ```{r misc_functions}
-source('misc_functions/functions.R')
+source('functions_scripts/functions.R')
 ```
 
-```{r load_packages, message=FALSE}
+```{r load_pacages, message=FALSE}
 library(tidyverse)
 library(psych)
 library(lavaan)
+library(broom)
 ```
 
 
-# SEM
+## Structural Equation Modeling
 
-Structural Equation Modeling takes a more structured approach to modeling observed and latent variables, often simultaneously, and including indirect effects, multiple outcomes in more.  
+Structural Equation Modeling (SEM) takes a more structured approach to modeling observed and latent variables, often simultaneously, and including indirect effects, multiple outcomes in more.  Most any model you have conducted can be seen as a special case of SEM, but SEM tools are generally geared towards specific kinds of models.
 
 ## CFA
 
-We can take a first step into the SEM by sticking with standard factor analysis.  In our very first example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge
+We can take a first step into the SEM by sticking with standard factor analysis.  In our previous example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge that tells us some variables should be more correlated with one another than others.
 
 ```{r}
+bfi_agree_neuro = bfi %>% 
+  select(matches('A[1-5]|N[1-5]'))
+
 modelCode = "
-  agree =~ A2 + A1 + A3 + A4 + A5
+  agree  =~ A2 + A1 + A3 + A4 + A5
   neurot =~ N1 + N2 + N3 + N4 + N5
 
   # specify correlated factors; not necessary
@@ -44,14 +49,75 @@ modelCode = "
   # agree ~~ 0*neurot
 "
 
-cfa_model = cfa(modelCode, data=bfi_trim)
-summary(cfa_model, standardized=T, rsq=T, nd=2)
+cfa_bfi = cfa(modelCode, data=bfi_agree_neuro)
+summary(cfa_bfi, standardized=T, rsq=T, fit=T, nd=2)
+```
+
+### Basic Interpretation
+
+#### Common Measures of Fit
+
+There are many, many measures of model fit  when one moves to the SEM realm, and none of them will give you a definitive answer as to how your model is doing.  Your assessment, should be based on a holistic approach to get a global sense of how your model is doing.  Let's loo again at the alienation results.
+
+What follows is a brief summary.
+
+
+```{r cfa_fit}
+glance(cfa_bfi)
 ```
 
 
+##### Chi-square test
 
-## Growth Curve Model
 
-## SEM
+Conceptually, the $\chi^2$ test measures the discrepancy between the observed correlations and those implied by the model.  This test compares the fitted model with a (saturated) model that does not have any degrees of freedom.   A non-significant $\chi^2$ suggests our model-implied correlations are not statistically different from those we observe. However, many things that affect this measure (and those using it), including:
 
+- multivariate non-normality: can 'help' or hurt depending on the nature of it
+- the size of the correlations: larger ones are typically related to larger predicted vs. observed discrepancies
+- unreliable measures: can actually make this test fail to reject
+- sample size: same as with any other model scenario and statistical significance
+
+##### CFI etc.
+
+The **Comparative Fit Index** compares the fitted model to a null model that assumes there is no relationship among the measured items (i.e. complete independence). It ranges from 0 to 1, or rather it is rounded to fall between 0 and 1, and CFI values larger than .9 or especially .95 are typically desired. Another one very commonly provided includes the **Tucker-Lewis Fit Index**, which is provided in standard **lavaan** output, but there are more **incremental fit indices** where those come from.
+
+##### RMSEA
+
+The **root mean squared error of approximation** is a measure that also centers on the model-implied vs. sample covariance matrix, and, all else being equal, is lower for simpler models and larger sample sizes. Maybe loo for values less than .05, but again, don't be rigid with this.  **Lavaan** also provides a one-sided test that the RMSEA is $\leq .05$, or 'test of close fit', for which the corresponding p-value ideally would be high.  The confidence interval is enough for reporting purposes, and an upper bound beyond .10 may indicate a problem.
+
+##### SRMR
+
+The **standardized root mean squared residual** is the mean absolute correlation residual, i.e. the difference between the observed and model-implied correlations. Historical suggestions are to also loo for values less than .05, but it is better to simply inspect the residuals and note where there are large discrepancies.
+
+
+##### Fit Summarized
+
+A brief summary of these and other old/typical measures of fit are described [here](https://en.wiipedia.org/wii/Confirmatory_factor_analysis#Evaluating_model_fit).  However they all have issues, and one should *never* use cutoffs as a basis for your ultimate thinking about model performance.  Studies have been done and all the fit indices can potentially have problems in various scenarios, and the cutoffs commonly used by applied researchers do not hold up under scrutiny.  While they can provide some assistance in the process, they are not meant to replace a global assessment of theory-result compatibility.  
+
+
+#### Model Comparison
+
+AIC and BIC can be used for model comparison.  In clear cases of hierarchical models, one can use likelihood ratio tests as well.
+
+
+```{r cfa_aic}
+AIC(cfa_bfi)
+```
+
+
+#### Loadings
+
+Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and is interpreted as before.  For example, we see the negatively valued loading for the reverse-scored item, as well as it being the lowest loading item (not an uncommon occurrence).  Other loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism seems a better scale than agreeableness.
+
+```{r cfa_loadings}
+broom::tidy(cfa_bfi,) %>% 
+  select(term, std.all) %>% 
+  filter(grepl(term, pattern = 'agree =~ |neurot =~')) %>% 
+  mutate(std.all = round(std.all, 2))
+```
+
+
+#### Other
+
+Aside from loadings and fit, we get the estimated correlations of the factors (`agree ~~ neurot`), the (residual) variances of the items and latent variables (`Variances`), and the average R-squared of each item explained by the factors (`R-Square`).
 

@@ -1,0 +1,63 @@
+---
+title: "Structural Equation Modeling"
+output: 
+  html_notebook: 
+    code_folding: none
+    highlight: pygments
+    theme: sandstone
+editor_options: 
+  chun_output_type: inline
+---
+
+
+## Initialization
+
+This assumes the prior Rmd files have been run.  See the README file.
+
+```{r misc_functions}
+source('functions_scripts/functions.R')
+```
+
+```{r load_pacages, message=FALSE}
+library(tidyverse)
+library(psych)
+library(lavaan)
+```
+
+## SEM
+
+Now let's move on to a full blown SEM. The following model is a classic example from Wheaton et al. (1977), which used longitudinal data to develop a model of the stability of alienation from 1967 to 1971, accounting for socioeconomic status as a covariate. Each of the three factors have two indicator variables, SES in 1966 is measured by education and occupational status in 1966 and alienation in both years is measured by powerlessness and anomie (a feeling of being lost with regard to society). The structural component of the model hypothesizes that SES in 1966 influences both alienation in 1967 and 1971 and alienation in 1967 influences the same measure in 1971.  We also let the disturbances correlate from one time point to the next.
+
+```{r sem_wheaton}
+# In this example we import the covariance matrix
+wheaton.cov = as.matrix(read.csv('data/wheaton_cov.csv', row.names=1))
+
+# the model
+wheaton.model = '
+  # measurement model
+    ses     =~ education + sei
+    alien67 =~ anomia67 + powerless67
+    alien71 =~ anomia71 + powerless71
+ 
+  # structural model
+    alien71 ~ aa*alien67 + ses
+    alien67 ~ sa*ses
+ 
+  # correlated residuals
+    anomia67 ~~ anomia71
+    powerless67 ~~ powerless71
+
+  # Indirect effect
+    IndirectEffect := sa*aa
+'
+
+alienation <- sem(wheaton.model, sample.cov=wheaton.cov, sample.nobs=932)
+summary(alienation)
+```
+
+
+## Other Common SEMs with Latent Variables
+
+- Growth Curve Model
+- Latent Classes
+- Measurement Invariance
