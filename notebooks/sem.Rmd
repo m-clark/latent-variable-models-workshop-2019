@@ -56,8 +56,9 @@ summary(alienation)
 ```
 
 
-## Other Common SEMs with Latent Variables
+## Some Common SEMs with Latent Variables
 
-- Growth Curve Model
-- Latent Classes
-- Measurement Invariance
+- Hierarchical CFA: higher order CFA
+- Growth Curve Model: longitudinal data
+- Latent Classes: categorical latent variables
+- Measurement Invariance: scale development across different populations

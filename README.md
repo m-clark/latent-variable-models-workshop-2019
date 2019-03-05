@@ -1,4 +1,4 @@
-latent-variable-models-workshop-2019
+### Latent Variable Models Workshop 2019
 
 
 Notebook and data for a workshop demonstrating latent variable models.  For more details see the main document: https://m-clark.github.io/sem/latent-variables.html and https://m-clark.github.io/docs/FA_notes.html
@@ -12,5 +12,5 @@ The order of the notebooks.  Note that code in subsequent files assumes that pre
 - Factor Analysis I
 - Factor Analysis II
 - Scale Reliability
-- Latent Variables More Generally
+- Latent Variables More Generally and SEM
 - Exercises
