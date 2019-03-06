@@ -52,10 +52,19 @@ modelCode = "
   # agree ~~ 0*neurot
 "
 
-cfa_bfi = cfa(modelCode, data=bfi_agree_neuro)
-summary(cfa_bfi, standardized=T, rsq=T, fit=T, nd=2)
+cfa_agree_neuro = cfa(modelCode, data=bfi_agree_neuro)
+summary(cfa_agree_neuro, standardized=T, rsq=T, fit=T, nd=2)
 ```
 
+We can visualize it as well.
+
+```{r bfi_agree_neuro_vis}
+# requires lavaanPlot
+# lavaanPlot::lavaanPlot('faplot', cfa_agree_neuro, coefs=T, stand=T)
+
+# otherwise use psych, will show raw rather than standardized loadings
+lavaan.diagram(cfa_agree_neuro, lr=F)
+```
 
 
 ### Common Measures of Fit
@@ -66,7 +75,7 @@ What follows is a brief summary.
 
 
 ```{r cfa_fit}
-glance(cfa_bfi) %>% mutate_if(is.numeric, round, digits = 2)
+glance(cfa_agree_neuro) %>% mutate_if(is.numeric, round, digits = 2)
 ```
 
 
@@ -104,7 +113,7 @@ AIC and BIC can be used for model comparison.  In clear cases of hierarchical mo
 
 
 ```{r cfa_aic}
-AIC(cfa_bfi)
+AIC(cfa_agree_neuro)
 ```
 
 
@@ -113,7 +122,7 @@ AIC(cfa_bfi)
 Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and these loadings are interpreted as before.  For example, we see the negatively valued loading for the reverse-scored item, as well as it being the lowest loading item (not an uncommon occurrence).  Other loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism seems a better scale than agreeableness.
 
 ```{r cfa_loadings}
-tidy(cfa_bfi) %>% 
+tidy(cfa_agree_neuro) %>% 
   select(term, std.all) %>% 
   filter(grepl(term, pattern = 'agree =~ |neurot =~')) %>% 
   mutate(std.all = round(std.all, 2))

@@ -23,3 +23,91 @@ library(psych)
 library(semTools)  # for semTools::reliability
 ```
 
+## Reliability
+
+When we talk about reliability in an everyday sense, or say that something is reliable it is fairly clear what we mean.  In the statistical realm we generally mean the something similar.  To say that 
+a measure is reliable means that it is a *good* measure, but what do we mean by good? Some notions include:
+
+- consistency
+- repeatability
+- correlated
+- construct saturation
+
+
+There are various statistics to help us assess reliability.  While some are more descriptive, others are more model-based.  In general they are telling us the same thing, but may have different underlying assumptions, or work better under different scenarios.
+
+## Classical Test Theory as a Starting Point
+
+To understand reliability we start with a simple formula:
+
+$$\mathrm{Observed\  Score = True\  Score + Error}$$
+
+A key idea of reliability is to understand what proportion of the observed variance is true score variance.
+
+$$\rho = \frac{\sigma^2_{true}}{\sigma^2_{observed}}$$
+
+While there are many nuances, understanding that basic concept will help you use whatever measure you ultimately decide upon.  And while we can't actually get the true score variance, we can estimate it with the information we do have in our data.
+
+
+## Coefficient Alpha
+
+The most commonly used measure of reliability is coefficient alpha.  Alpha is based on the average inter-variable correlation as well as the number of variables involved.  We can get it easily using `psych`, as well as other useful information.  Let's use it on the `bfi` agreement items.
+
+
+
+```{r alpha}
+# use check.keys option to deal with reverse-scored items
+# copy and paste to your console, or preview your document after running
+alpha(bfi_agree, check.keys = TRUE)
+```
+
+
+The main things to focus on are the estimate itself (typically standardized is reported), the uncertainty estimate for it (i.e. the confidence interval), and which items would most affect the value (negatively or positively) if they were dropped from the set.
+
+In the end we aren't really learning anything new with this relative to our factor analysis, which is why I suggest using FA for your exploration as reliability, but this is just another way to look at it.  One thing to note, the coefficient assumes an underlying factor model where there is only one latent construct where the item loadings are equivalent.  Otherwise it is biased downward, and can only serve as a lower-bound estimate of reliability. 
+
+## Model-based Measures
+
+### Latent Variable Models
+
+We also have model based measures of reliability based on factor analysis.  The `psych` package has a very useful `omega` function that explores the factor saturation of an item set.  `semTools` will provide us that, average variance extracted, as well as the different flavors of omega.
+
+```{r omega_plus}
+# omega and omega2 will be the same for our purposes; omega3 is the
+# omega-hierarchical value in psych package
+reliability(cfa_agree_neuro) %>% 
+  round(2)
+```
+
+### Mixed Models, Intra-class Correlation, G-Theory, Repeatability
+
+It turns out that mixed models can be used to provide another notion of reliability focused on how repeatable a mean score would be under a given set of circumstances.  Most of the statistics provided use the intra-class correlation coefficient as a starting point.
+
+For those familiar with mixed models, the following shows a demo of how to calculate the ICC and  generalizability coefficient, and compares them to coefficient alpha.
+
+```{r repeat, message=FALSE}
+library(lme4)
+bfi_agree_long = bfi_agree %>% 
+  mutate(id = 1:n()) %>% 
+  gather(key = item, value = score, -id)
+model = lmer(score ~ item + (1|id), data = bfi_agree_long)
+
+# summary(model)
+
+# take variance components
+vc =
+  data.frame(VarCorr(model)) %>% 
+  select(grp, vcov) 
+
+# ICC = variance of id, i.e. due to individuals out of total
+# G-theory generalizability coefficient divides residual by the number of items
+vc
+
+tibble(icc = vc$vcov[1]/(vc$vcov[1] + vc$vcov[2]),
+       generalizability = vc$vcov[1]/(vc$vcov[1] + vc$vcov[2]/5), # 5 = number of items
+       alpha = alpha(bfi_agree)$total$raw_alpha)
+```
+
+It's not always the case that these would be essentially the same value.  Generalizability is an attempt to move beyond the assumptions of coefficient alpha to a more general sense of repeatability of measurement. It provides different ways to calculate generalizability depending on our generalization goals.  But it's instructive to know they have a similar starting point for simple settings.
+
+Packages of that might be of use include: `lme4`, `rptR`, `gtheory`.

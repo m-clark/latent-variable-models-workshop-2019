@@ -49,12 +49,12 @@ For more complex models/variables, it is best to visualize the result.
 
 ```{r pca_vis}
 fa.diagram(pc_result)
-fa.graph(pc_result, 
-         rank.direction = 'TB', 
-         simple = F,
-         digits = 2,
-         out.file = 'visualization/pca_intro.gv')
-DiagrammeR::grViz('visualization/pca_intro.gv')
+# fa.graph(pc_result, 
+#          rank.direction = 'TB', 
+#          simple = F,
+#          digits = 2,
+#          out.file = 'visualization/pca_intro.gv')
+DiagrammeR::grViz('functions_scripts/pca_intro.gv')
 ```
 
 
@@ -63,7 +63,8 @@ We can also get the component scores for each observation.  For example, Alabama
 
 ```{r pca_scores}
 pc_result$scores %>% 
-  head(10)
+  head(10) %>% 
+  round(2)
 ```
 
 ## Measurement of a Latent Construct
