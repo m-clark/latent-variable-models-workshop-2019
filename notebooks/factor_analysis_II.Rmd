@@ -32,50 +32,51 @@ Structural Equation Modeling (SEM) takes a more theoretically based approach to 
 
 ## Latent Variable Modeling
 
-We can take a first step into the SEM by sticking with standard factor analysis.  In our previous example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge that tells us some variables should be more correlated with one another than others. Some call this 'confirmatory factor analysis' as opposed to 'exploratory factor analysis', but this is not a very useful distinction in my opinion.  The CFA is just a reduced or constrained model relative to the EFA.  The EFA is more realistic (no loading is truly 0), but the CFA is cleaner and more easily interpreted.
+We can take a first step into the SEM by sticking with standard factor analysis.  In our previous example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge that tells us some variables should be more correlated with one another than others. Some call this 'confirmatory factor analysis' as opposed to 'exploratory factor analysis', but this is not a very useful distinction in my opinion.  The CFA is just a reduced or constrained model relative to the EFA.  The EFA is more realistic (no loading is truly 0), but the CFA is cleaner and usually more easily interpreted.
 
-To run the following model we'll use `lavaan` and its `cfa` function.  We'll first reduce the `bfi` data to two item sets of agreeableness and neuroticism.  We'll also reverse score the items to get consistent/positive loadings.  The notebook may have problems displaying everything inline, so you may need to look to your console or preview to see all the output.
+To run the following model we'll use `lavaan` and its `cfa` function.  We'll first reduce the `bfi` data to two item sets of extraversion and neuroticism.  We'll also reverse score the items to get consistent/positive loadings.  The notebook may have problems displaying everything inline, so you may need to look to your console or preview to see all the output.
 
-```{r bfi_agree_neuro}
-bfi_agree_neuro = bfi %>% 
+```{r bfi_extr_neuro}
+bfi_extr_neuro = bfi %>% 
   select(matches('E[1-5]|N[1-5]')) %>% 
   mutate(E2 = -E2, E1 = -E1)
 
 modelCode = "
-  agree  =~ E1 + E2 + E3 + E4 + E5
+  extra  =~ E1 + E2 + E3 + E4 + E5
   neurot =~ N1 + N2 + N3 + N4 + N5
 
   # specify correlated factors; not necessary
-  # agree ~~ neurot
+  # extra ~~ neurot
 
   # if you don't want them correlated
-  # agree ~~ 0*neurot
+  # extra ~~ 0*neurot
 "
 
-cfa_agree_neuro = cfa(modelCode, data=bfi_agree_neuro)
-summary(cfa_agree_neuro, standardized=T, rsq=T, fit=T, nd=2)
+cfa_extr_neuro = cfa(modelCode, data=bfi_extr_neuro)
+summary(cfa_extr_neuro, standardized=T, rsq=T, fit=T, nd=2)
 ```
 
 We can visualize it as well.
 
-```{r bfi_agree_neuro_vis}
+```{r bfi_extr_neuro_vis}
 # requires lavaanPlot
-# lavaanPlot::lavaanPlot('faplot', cfa_agree_neuro, coefs=T, stand=T)
+# lavaanPlot::lavaanPlot('faplot', cfa_extr_neuro, coefs=T, stand=T)
 
 # otherwise use psych, will show raw rather than standardized loadings
-lavaan.diagram(cfa_agree_neuro, lr=F)
+lavaan.diagram(cfa_extr_neuro, lr=F)
 ```
 
 
 ### Common Measures of Fit
 
-There are many, many measures of model fit  when one moves to the SEM realm, and none of them will give you a definitive answer as to how your model is doing.  Your assessment, should be based on a holistic approach to get a global sense of how your model is doing.  Let's loo again at the alienation results.
+There are many, many measures of model fit  when one moves to the SEM realm, and none of them will give you a definitive answer as to how your model is doing.  Your assessment, should be based on a holistic approach to get a global sense of how your model is doing.  Let's look again at the  results.
 
 What follows is a brief summary.
 
 
 ```{r cfa_fit}
-glance(cfa_agree_neuro) %>% mutate_if(is.numeric, round, digits = 2)
+glance(cfa_extr_neuro) %>% 
+  mutate_if(is.numeric, round, digits = 2)
 ```
 
 
@@ -91,15 +92,15 @@ Conceptually, the $\chi^2$ test measures the discrepancy between the observed co
 
 ##### CFI etc.
 
-The **Comparative Fit Index** compares the fitted model to a null model that assumes there is no relationship among the measured items (i.e. complete independence). It ranges from 0 to 1, or rather it is rounded to fall between 0 and 1, and CFI values larger than .9 or especially .95 are typically desired. Another one very commonly provided includes the **Tucker-Lewis Fit Index**, which is provided in standard **lavaan** output, but there are more **incremental fit indices** where those come from.
+The **Comparative Fit Index** compares the fitted model to a null model that assumes there is no relationship among the measured items (i.e. complete independence). It ranges from 0 to 1, or rather it is rounded to fall between 0 and 1, and CFI values larger than .95 are typically desired. Another one very commonly provided includes the **Tucker-Lewis Fit Index**, which is provided in standard `lavaan` output, but there are more **incremental fit indices** where those come from.
 
 ##### RMSEA
 
-The **root mean squared error of approximation** is a measure that also centers on the model-implied vs. sample covariance matrix, and, all else being equal, is lower for simpler models and larger sample sizes. Maybe loo for values less than .05, but again, don't be rigid with this.  **Lavaan** also provides a one-sided test that the RMSEA is $\leq .05$, or 'test of close fit', for which the corresponding p-value ideally would be high.  The confidence interval is enough for reporting purposes, and an upper bound beyond .10 may indicate a problem.
+The **root mean squared error of approximation** is a measure that also centers on the model-implied vs. sample covariance matrix, and, all else being equal, is lower for simpler models and larger sample sizes. Maybe look for values less than .05, but again, don't be rigid with this.  `Lavaan` also provides a one-sided test that the RMSEA is $\leq .05$, or 'test of close fit', for which the corresponding p-value ideally would be high.  The confidence interval is enough for reporting purposes, and an upper bound beyond .10 may indicate a problem.
 
 ##### SRMR
 
-The **standardized root mean squared residual** is the mean absolute correlation residual, i.e. the difference between the observed and model-implied correlations. Historical suggestions are to also loo for values less than .05, but it is better to simply inspect the residuals and note where there are large discrepancies.
+The **standardized root mean squared residual** is the mean absolute correlation residual, i.e. the difference between the observed and model-implied correlations. Historical suggestions are to also look for values less than .05, but it is better to simply inspect the residuals and note where there are large discrepancies.
 
 
 ##### Fit Summarized
@@ -113,18 +114,18 @@ AIC and BIC can be used for model comparison.  In clear cases of hierarchical mo
 
 
 ```{r cfa_aic}
-AIC(cfa_agree_neuro)
+AIC(cfa_extr_neuro)
 ```
 
 
 ### Loadings
 
-Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and these loadings are interpreted as before.  For example, we see the negatively valued loading for the reverse-scored item, as well as it being the lowest loading item (not an uncommon occurrence).  Other loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism seems a better scale than agreeableness.
+Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and these loadings are interpreted as before.  For example, we would see a negatively valued loading for the reverse-scored item if we leave it as is (and typically a lower loading in practice).  For our result, loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism perhaps seems a better scale than extraversion.
 
 ```{r cfa_loadings}
-tidy(cfa_agree_neuro) %>% 
+tidy(cfa_extr_neuro) %>% 
   select(term, std.all) %>% 
-  filter(grepl(term, pattern = 'agree =~ |neurot =~')) %>% 
+  filter(grepl(term, pattern = 'extra =~ |neurot =~')) %>% 
   mutate(std.all = round(std.all, 2))
 ```
 
@@ -139,4 +140,4 @@ If you do end up conducting SEM with latent variables for more complicated model
 
 ## No Double-Dipping
 
-Doing a reduced factor analysis after an exploratory one, and then only presenting the trimmed one as your main result is misleading and basically a sure way to overfit your data.  It would be okay if you do the reduced one on new data, but this unfortunately is very rarely done.
+Doing a reduced factor analysis after an exploratory one, and then only presenting the trimmed one as your main result, is both misleading and basically a sure way to overfit your data.  It would be okay if you do the reduced one on new data, but this unfortunately is very rarely done.  You can perhaps report the results of the reduced model, but it should not be of focus.

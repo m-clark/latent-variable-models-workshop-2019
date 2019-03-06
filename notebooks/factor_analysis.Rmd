@@ -33,14 +33,20 @@ bfi_agree = bfi %>%
   select(matches('A[1-5]'))
 ```
 
+The `Diagrammer` package can, with effort, create some nice visualizations for us.
+
 ```{r fa_graphical_model}
-DiagrammeR::grViz('functions_scripts/fa_gm.gv')
+DiagrammeR::grViz('functions_scripts/fa_gm.gv') 
 ```
 
 
 ### Inspect correlations
 
+The first thing to do before running a factor analysis is inspect the correlation matrix.  If the variables aren't correlated, There is no useful latent structure to uncover.  The goal of factor analysis is to understand the observed correlations.
+
 ```{r cor_agree}
+describe(bfi_agree)
+
 # note how A1 is negatively scored
 cor_agree = cor(bfi_agree, use = 'pair')
 
@@ -52,7 +58,7 @@ cor_agree %>%
 
 ### Factor model
 
-Let's run a factor analysis.  These items should belong to a single factor, so that's the model we'll run (default for `fa` is one factor).  
+Now that we understand the data a bit better, let's run a factor analysis.  Even though one item is reverse scored and thus negatively correlated with the others, these items should belong to a single underlying construct, so that's the model we'll run (default for `fa` is one factor).  
 
 There are two parts to the output.  We will concern ourselves with the loadings first (`MR1`).  Conceptually they tell us how the observed variables are correlated with the latent variable.  The `h2` is the square of that, called the **communality**, and is like the R^2^ for that variable, i.e. how much of its observed variance is accounted for by the latent.  The `u2` is the **uniqueness**, or how much is not explained (1 - `h2`).  The final value is a measure of **complexity**. A value of 1 might be seen for something that loaded on only one factor, which is all we have here, but otherwise will increase the more the variable loads on multiple factors.
 
@@ -64,7 +70,7 @@ fa_agree
 A simple diagram explains the model and its result.
 
 ```{r fa_agree_vis}
-fa.diagram(fa_agree)
+fa.diagram(fa_agree, digits = 2, errors = T)
 
 # in case you are interested in how to make the graphviz file
 # fa.graph(fa_agree,
@@ -73,11 +79,13 @@ fa.diagram(fa_agree)
 #          digits = 2,
 #          out.file = 'functions_scripts/fa_agree.gv')
 
-DiagrammeR::grViz('functions_scripts/fa_agree.gv')
+# DiagrammeR::grViz('functions_scripts/fa_agree.gv')
 ```
 
 
 ## The Latent Linear Model
+
+This section is best viewed via the preview.
 
 We can think of a factor analysis for a single variable in terms of just a basic regression model. For each observed variable as a dependent variable we have $\beta_0$ is the intercept and $\lambda$ the regression coefficient that expresses the effect of the latent variable $F$ on the observed variable $X$.
 
@@ -158,9 +166,9 @@ fa.diagram(fa_ability, sort = F)
 Perhaps a couple items are not so great, and if we were more stringent, we might not be okay with this.  However, the other fit measures suggest the model is viable.
 
 
-## Exercise
+## How Many Factors?
 
-Go back to the `bfi` data and examine different factor solutions. The following visualization shows our factor analysis solution versus what we would have gotten against randomly resampled or simulated data.  The idea is to retain the number of factors for a model with a statistically higher eigenvalue than the random data.
+As an exercise, go back to the `bfi` data and examine different factor solutions. The following visualization shows our factor analysis solution versus what we would have gotten against randomly resampled or simulated data.  The idea is to retain the number of factors for a model with a statistically higher eigenvalue than the random data.
 
 Which one might you select?
 

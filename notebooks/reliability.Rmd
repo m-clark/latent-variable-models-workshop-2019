@@ -25,7 +25,7 @@ library(semTools)  # for semTools::reliability
 
 ## Reliability
 
-When we talk about reliability in an everyday sense, or say that something is reliable it is fairly clear what we mean.  In the statistical realm we generally mean the something similar.  To say that 
+When we talk about **reliability** in an everyday sense, or say that something is reliable it is fairly clear what we mean.  In the statistical realm we generally mean something similar.  To say that 
 a measure is reliable means that it is a *good* measure, but what do we mean by good? Some notions include:
 
 - consistency
@@ -34,7 +34,7 @@ a measure is reliable means that it is a *good* measure, but what do we mean by 
 - construct saturation
 
 
-There are various statistics to help us assess reliability.  While some are more descriptive, others are more model-based.  In general they are telling us the same thing, but may have different underlying assumptions, or work better under different scenarios.
+There are various statistics to help us assess reliability.  While some are more descriptive, others are model-based using factor analysis or other approaches.  In general they are telling us the same thing, but may have different underlying assumptions, or work better under different scenarios.
 
 ## Classical Test Theory as a Starting Point
 
@@ -75,7 +75,7 @@ We also have model based measures of reliability based on factor analysis.  The 
 ```{r omega_plus}
 # omega and omega2 will be the same for our purposes; omega3 is the
 # omega-hierarchical value in psych package
-reliability(cfa_agree_neuro) %>% 
+reliability(cfa_extr_neuro) %>% 
   round(2)
 ```
 
@@ -85,13 +85,14 @@ It turns out that mixed models can be used to provide another notion of reliabil
 
 For those familiar with mixed models, the following shows a demo of how to calculate the ICC and  generalizability coefficient, and compares them to coefficient alpha.
 
-```{r repeat, message=FALSE}
+```{r repeat, message=FALSE, warning=FALSE}
 library(lme4)
 bfi_agree_long = bfi_agree %>% 
   mutate(id = 1:n()) %>% 
   gather(key = item, value = score, -id)
-model = lmer(score ~ item + (1|id), data = bfi_agree_long)
 
+# mixed model
+model = lmer(score ~ item + (1|id), data = bfi_agree_long)
 # summary(model)
 
 # take variance components
@@ -99,15 +100,33 @@ vc =
   data.frame(VarCorr(model)) %>% 
   select(grp, vcov) 
 
-# ICC = variance of id, i.e. due to individuals out of total
-# G-theory generalizability coefficient divides residual by the number of items
+# ICC = proportion of variance due to id out of total, i.e. due to individuals
+# out of total. G-theory generalizability coefficient divides residual by the
+# number of items
 vc
+
+alpha_res = alpha(bfi_agree)$total
 
 tibble(icc = vc$vcov[1]/(vc$vcov[1] + vc$vcov[2]),
        generalizability = vc$vcov[1]/(vc$vcov[1] + vc$vcov[2]/5), # 5 = number of items
-       alpha = alpha(bfi_agree)$total$raw_alpha)
+       alpha = alpha_res$raw_alpha,
+       avg_r = alpha_res$average_r) %>% 
+  round(3)
 ```
 
-It's not always the case that these would be essentially the same value.  Generalizability is an attempt to move beyond the assumptions of coefficient alpha to a more general sense of repeatability of measurement. It provides different ways to calculate generalizability depending on our generalization goals.  But it's instructive to know they have a similar starting point for simple settings.
+Compare to `psych` ICC 3.
 
-Packages of that might be of use include: `lme4`, `rptR`, `gtheory`.
+```{r icc_psych}
+ICC_res = ICC(bfi_agree)$results
+ICC_res %>% 
+  rownames_to_column('setting') %>% 
+  select(setting, type, ICC) %>%
+  filter(grepl(type, pattern='ICC3')) %>% 
+  mutate_at(vars(ICC), round, digits=3)
+```
+
+Thus intra-class correlation can be interpreted as the reliability for one item, while the others tell us the reliability of the mean, which, in the case of alpha, is our attempt at a true score.  It should also be similar to the average correlation among the items.
+
+It's not always the case that the g coefficient and alpha would be essentially the same value.  Generalizability is an attempt to move beyond the assumptions of coefficient alpha to a more general sense of repeatability of measurement. It provides different ways to calculate generalizability depending on our generalization goals.  But it's instructive to know they have a similar starting point for simple settings.
+
+Packages of that might be of use include: `lme4`, `sjstats` (a quick icc for an lme4 model), `rptR`, `gtheory`.

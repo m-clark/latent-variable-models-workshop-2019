@@ -2,11 +2,12 @@
 title: "Structural Equation Modeling"
 output: 
   html_notebook: 
-    code_folding: none
+    #code_folding: none
     highlight: pygments
     theme: sandstone
 editor_options: 
   chun_output_type: inline
+  chunk_output_type: inline
 ---
 
 
@@ -52,8 +53,14 @@ wheaton.model = '
 '
 
 alienation <- sem(wheaton.model, sample.cov=wheaton.cov, sample.nobs=932)
-summary(alienation)
+summary(alienation, fit=T, rsq=T, std=T)
 ```
+
+The only difference here is that we have regression parameters to interpret, but they are interpreted like any other, and in this case represent the relationship of one latent variable to others.  In this case we have a fairly stable estimate from the earlier values of `alienation` to the subsequent ones, and a negative relationship of `ses` to both, meaning that the better off you are socially and economically, the less alienated you will feel.
+
+Additionally, we have residual correlations for the same measures at the two time points, as well as (residual) variance estimates.  We might be interested in the R-Square for the alienation latent variables.
+
+We also have an indirect effect here, and the code provides a simple way to calculate its significance (this is not always the correct way to do it depending on the model).  The interpretation here is that  `ses` affects alienation both directly and through its previous effects.
 
 
 ## Some Common SEMs with Latent Variables

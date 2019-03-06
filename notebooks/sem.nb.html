@@ -1565,7 +1565,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(title);
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -1610,6 +1610,15 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -1805,6 +1814,7 @@ $(document).ready(function () {
 <script>
 $(document).ready(function () {
   window.initializeSourceEmbed("sem.Rmd");
+  window.initializeCodeFolding("show" === "show");
 });
 </script>
 
@@ -1817,6 +1827,9 @@ $(document).ready(function () {
 <div class="btn-group pull-right">
 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
 <li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
@@ -1834,53 +1847,53 @@ $(document).ready(function () {
 <p>This assumes the prior Rmd files have been run. See the README file.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKCdmdW5jdGlvbnNfc2NyaXB0cy9mdW5jdGlvbnMuUicpXG5gYGAifQ== -->
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">source</span>(<span class="st">&#39;functions_scripts/functions.R&#39;</span>)</a></code></pre></div>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuc291cmNlKCdmdW5jdGlvbnNfc2NyaXB0cy9mdW5jdGlvbnMuUicpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r source(‘functions_scripts/functions.R’)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHBzeWNoKVxubGlicmFyeShsYXZhYW4pXG5gYGAifQ== -->
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(psych)</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw">library</span>(lavaan)</a></code></pre></div>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHBzeWNoKVxubGlicmFyeShsYXZhYW4pXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r library(tidyverse) library(psych) library(lavaan)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
 <div id="sem" class="section level2">
 <h2>SEM</h2>
-<p>Now let’s move on to a full blown SEM. The following model is a classic example from Wheaton et al. (1977), which used longitudinal data to develop a model of the stability of alienation from 1967 to 1971, accounting for socioeconomic status as a covariate. Each of the three factors have two indicator variables, SES in 1966 is measured by education and occupational status in 1966 and alienation in both years is measured by powerlessness and anomie (a feeling of being lost with regard to society). The structural component of the model hypothesizes that SES in 1966 influences both alienation in 1967 and 1971 and alienation in 1967 influences the same measure in 1971. We also let the disturbances correlate from one time point to the next.</p>
+<p>Now let’s move on to a full blown SEM. The following model is a classic example from Wheaton et al. (1977), which used longitudinal data to develop a model of the stability of alienation from 1967 to 1971, accounting for socioeconomic status as a covariate. Each of the three factors have two indicator variables, SES in 1966 is measured by education and occupational status in 1966 and alienation in both years is measured by powerlessness and anomie (a feeling of being lost with regard to society). The structural component of the model hypothesizes that SES in 1966 influences both alienation in 1967 and 1971 and alienation in 1967 influences the same measure in 1971. We also let the disturbances correlate from one time point to the next.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbiB0aGlzIGV4YW1wbGUgd2UgaW1wb3J0IHRoZSBjb3ZhcmlhbmNlIG1hdHJpeFxud2hlYXRvbi5jb3YgPSBhcy5tYXRyaXgocmVhZC5jc3YoJ2RhdGEvd2hlYXRvbl9jb3YuY3N2Jywgcm93Lm5hbWVzPTEpKVxuXG4jIHRoZSBtb2RlbFxud2hlYXRvbi5tb2RlbCA9ICdcbiAgIyBtZWFzdXJlbWVudCBtb2RlbFxuICAgIHNlcyAgICAgPX4gZWR1Y2F0aW9uICsgc2VpXG4gICAgYWxpZW42NyA9fiBhbm9taWE2NyArIHBvd2VybGVzczY3XG4gICAgYWxpZW43MSA9fiBhbm9taWE3MSArIHBvd2VybGVzczcxXG4gXG4gICMgc3RydWN0dXJhbCBtb2RlbFxuICAgIGFsaWVuNzEgfiBhYSphbGllbjY3ICsgc2VzXG4gICAgYWxpZW42NyB+IHNhKnNlc1xuIFxuICAjIGNvcnJlbGF0ZWQgcmVzaWR1YWxzXG4gICAgYW5vbWlhNjcgfn4gYW5vbWlhNzFcbiAgICBwb3dlcmxlc3M2NyB+fiBwb3dlcmxlc3M3MVxuXG4gICMgSW5kaXJlY3QgZWZmZWN0XG4gICAgSW5kaXJlY3RFZmZlY3QgOj0gc2EqYWFcbidcblxuYWxpZW5hdGlvbiA8LSBzZW0od2hlYXRvbi5tb2RlbCwgc2FtcGxlLmNvdj13aGVhdG9uLmNvdiwgc2FtcGxlLm5vYnM9OTMyKVxuc3VtbWFyeShhbGllbmF0aW9uKVxuYGBgIn0= -->
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># In this example we import the covariance matrix</span></a>
-<a class="sourceLine" id="cb3-2" title="2">wheaton.cov =<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">read.csv</span>(<span class="st">&#39;data/wheaton_cov.csv&#39;</span>, <span class="dt">row.names=</span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb3-3" title="3"></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co"># the model</span></a>
-<a class="sourceLine" id="cb3-5" title="5">wheaton.model =<span class="st"> &#39;</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="st">  # measurement model</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="st">    ses     =~ education + sei</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">    alien67 =~ anomia67 + powerless67</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="st">    alien71 =~ anomia71 + powerless71</span></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="st">  # structural model</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="st">    alien71 ~ aa*alien67 + ses</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="st">    alien67 ~ sa*ses</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="st">  # correlated residuals</span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="st">    anomia67 ~~ anomia71</span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="st">    powerless67 ~~ powerless71</span></a>
-<a class="sourceLine" id="cb3-18" title="18"></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="st">  # Indirect effect</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="st">    IndirectEffect := sa*aa</span></a>
-<a class="sourceLine" id="cb3-21" title="21"><span class="st">&#39;</span></a>
-<a class="sourceLine" id="cb3-22" title="22"></a>
-<a class="sourceLine" id="cb3-23" title="23">alienation &lt;-<span class="st"> </span><span class="kw">sem</span>(wheaton.model, <span class="dt">sample.cov=</span>wheaton.cov, <span class="dt">sample.nobs=</span><span class="dv">932</span>)</a>
-<a class="sourceLine" id="cb3-24" title="24"><span class="kw">summary</span>(alienation)</a></code></pre></div>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbiB0aGlzIGV4YW1wbGUgd2UgaW1wb3J0IHRoZSBjb3ZhcmlhbmNlIG1hdHJpeFxud2hlYXRvbi5jb3YgPSBhcy5tYXRyaXgocmVhZC5jc3YoJ2RhdGEvd2hlYXRvbl9jb3YuY3N2Jywgcm93Lm5hbWVzPTEpKVxuXG4jIHRoZSBtb2RlbFxud2hlYXRvbi5tb2RlbCA9ICdcbiAgIyBtZWFzdXJlbWVudCBtb2RlbFxuICAgIHNlcyAgICAgPX4gZWR1Y2F0aW9uICsgc2VpXG4gICAgYWxpZW42NyA9fiBhbm9taWE2NyArIHBvd2VybGVzczY3XG4gICAgYWxpZW43MSA9fiBhbm9taWE3MSArIHBvd2VybGVzczcxXG4gXG4gICMgc3RydWN0dXJhbCBtb2RlbFxuICAgIGFsaWVuNzEgfiBhYSphbGllbjY3ICsgc2VzXG4gICAgYWxpZW42NyB+IHNhKnNlc1xuIFxuICAjIGNvcnJlbGF0ZWQgcmVzaWR1YWxzXG4gICAgYW5vbWlhNjcgfn4gYW5vbWlhNzFcbiAgICBwb3dlcmxlc3M2NyB+fiBwb3dlcmxlc3M3MVxuXG4gICMgSW5kaXJlY3QgZWZmZWN0XG4gICAgSW5kaXJlY3RFZmZlY3QgOj0gc2EqYWFcbidcblxuYWxpZW5hdGlvbiA8LSBzZW0od2hlYXRvbi5tb2RlbCwgc2FtcGxlLmNvdj13aGVhdG9uLmNvdiwgc2FtcGxlLm5vYnM9OTMyKVxuc3VtbWFyeShhbGllbmF0aW9uLCBmaXQ9VCwgcnNxPVQsIHN0ZD1UKVxuYGBgIn0= -->
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># In this example we import the covariance matrix</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">wheaton.cov =<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">read.csv</span>(<span class="st">'data/wheaton_cov.csv'</span>, <span class="dt">row.names=</span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># the model</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">wheaton.model =<span class="st"> '</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">  # measurement model</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">    ses     =~ education + sei</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="st">    alien67 =~ anomia67 + powerless67</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="st">    alien71 =~ anomia71 + powerless71</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">  # structural model</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="st">    alien71 ~ aa*alien67 + ses</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="st">    alien67 ~ sa*ses</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="st">  # correlated residuals</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="st">    anomia67 ~~ anomia71</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="st">    powerless67 ~~ powerless71</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="st">  # Indirect effect</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="st">    IndirectEffect := sa*aa</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="st">'</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">alienation &lt;-<span class="st"> </span><span class="kw">sem</span>(wheaton.model, <span class="dt">sample.cov=</span>wheaton.cov, <span class="dt">sample.nobs=</span><span class="dv">932</span>)</a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="kw">summary</span>(alienation, <span class="dt">fit=</span>T, <span class="dt">rsq=</span>T, <span class="dt">std=</span>T)</a></code></pre></div>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoibGF2YWFuIDAuNi0zIGVuZGVkIG5vcm1hbGx5IGFmdGVyIDg0IGl0ZXJhdGlvbnNcblxuICBPcHRpbWl6YXRpb24gbWV0aG9kICAgICAgICAgICAgICAgICAgICAgICAgICAgTkxNSU5CXG4gIE51bWJlciBvZiBmcmVlIHBhcmFtZXRlcnMgICAgICAgICAgICAgICAgICAgICAgICAgMTdcblxuICBOdW1iZXIgb2Ygb2JzZXJ2YXRpb25zICAgICAgICAgICAgICAgICAgICAgICAgICAgOTMyXG5cbiAgRXN0aW1hdG9yICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNTFxuICBNb2RlbCBGaXQgVGVzdCBTdGF0aXN0aWMgICAgICAgICAgICAgICAgICAgICAgIDQuNzM1XG4gIERlZ3JlZXMgb2YgZnJlZWRvbSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDRcbiAgUC12YWx1ZSAoQ2hpLXNxdWFyZSkgICAgICAgICAgICAgICAgICAgICAgICAgICAwLjMxNlxuXG5QYXJhbWV0ZXIgRXN0aW1hdGVzOlxuXG4gIEluZm9ybWF0aW9uICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRXhwZWN0ZWRcbiAgSW5mb3JtYXRpb24gc2F0dXJhdGVkIChoMSkgbW9kZWwgICAgICAgICAgU3RydWN0dXJlZFxuICBTdGFuZGFyZCBFcnJvcnMgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFN0YW5kYXJkXG5cbkxhdGVudCBWYXJpYWJsZXM6XG4gICAgICAgICAgICAgICAgICAgRXN0aW1hdGUgIFN0ZC5FcnIgIHotdmFsdWUgIFAoPnx6fClcbiAgc2VzID1+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIGVkdWNhdGlvbiAgICAgICAgIDEuMDAwICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgc2VpICAgICAgICAgICAgICAgNS4yMTkgICAgMC40MjIgICAxMi4zNjQgICAgMC4wMDBcbiAgYWxpZW42NyA9fiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIGFub21pYTY3ICAgICAgICAgIDEuMDAwICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgcG93ZXJsZXNzNjcgICAgICAgMC45NzkgICAgMC4wNjIgICAxNS44OTUgICAgMC4wMDBcbiAgYWxpZW43MSA9fiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIGFub21pYTcxICAgICAgICAgIDEuMDAwICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgcG93ZXJsZXNzNzEgICAgICAgMC45MjIgICAgMC4wNTkgICAxNS40OTggICAgMC4wMDBcblxuUmVncmVzc2lvbnM6XG4gICAgICAgICAgICAgICAgICAgRXN0aW1hdGUgIFN0ZC5FcnIgIHotdmFsdWUgIFAoPnx6fClcbiAgYWxpZW43MSB+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIGFsaWVuNjcgICAoYWEpICAgIDAuNjA3ICAgIDAuMDUxICAgMTEuODk4ICAgIDAuMDAwXG4gICAgc2VzICAgICAgICAgICAgICAtMC4yMjcgICAgMC4wNTIgICAtNC4zMzQgICAgMC4wMDBcbiAgYWxpZW42NyB+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIHNlcyAgICAgICAoc2EpICAgLTAuNTc1ICAgIDAuMDU2ICAtMTAuMTk1ICAgIDAuMDAwXG5cbkNvdmFyaWFuY2VzOlxuICAgICAgICAgICAgICAgICAgIEVzdGltYXRlICBTdGQuRXJyICB6LXZhbHVlICBQKD58enwpXG4gLmFub21pYTY3IH5+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgIC5hbm9taWE3MSAgICAgICAgICAxLjYyMyAgICAwLjMxNCAgICA1LjE3NiAgICAwLjAwMFxuIC5wb3dlcmxlc3M2NyB+fiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAucG93ZXJsZXNzNzEgICAgICAgMC4zMzkgICAgMC4yNjEgICAgMS4yOTggICAgMC4xOTRcblxuVmFyaWFuY2VzOlxuICAgICAgICAgICAgICAgICAgIEVzdGltYXRlICBTdGQuRXJyICB6LXZhbHVlICBQKD58enwpXG4gICAuZWR1Y2F0aW9uICAgICAgICAgMi44MDEgICAgMC41MDcgICAgNS41MjUgICAgMC4wMDBcbiAgIC5zZWkgICAgICAgICAgICAgMjY0LjU5NyAgIDE4LjEyNiAgIDE0LjU5NyAgICAwLjAwMFxuICAgLmFub21pYTY3ICAgICAgICAgIDQuNzMxICAgIDAuNDUzICAgMTAuNDQxICAgIDAuMDAwXG4gICAucG93ZXJsZXNzNjcgICAgICAgMi41NjMgICAgMC40MDMgICAgNi4zNTkgICAgMC4wMDBcbiAgIC5hbm9taWE3MSAgICAgICAgICA0LjM5OSAgICAwLjUxNSAgICA4LjU0MiAgICAwLjAwMFxuICAgLnBvd2VybGVzczcxICAgICAgIDMuMDcwICAgIDAuNDM0ICAgIDcuMDcwICAgIDAuMDAwXG4gICAgc2VzICAgICAgICAgICAgICAgNi43OTggICAgMC42NDkgICAxMC40NzUgICAgMC4wMDBcbiAgIC5hbGllbjY3ICAgICAgICAgICA0Ljg0MSAgICAwLjQ2NyAgIDEwLjM1OSAgICAwLjAwMFxuICAgLmFsaWVuNzEgICAgICAgICAgIDQuMDgzICAgIDAuNDA0ICAgMTAuMTA0ICAgIDAuMDAwXG5cbkRlZmluZWQgUGFyYW1ldGVyczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KVxuICAgIEluZGlyZWN0RWZmZWN0ICAgLTAuMzQ5ICAgIDAuMDQxICAgLTguNTM4ICAgIDAuMDAwXG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoibGF2YWFuIDAuNi0zIGVuZGVkIG5vcm1hbGx5IGFmdGVyIDg0IGl0ZXJhdGlvbnNcblxuICBPcHRpbWl6YXRpb24gbWV0aG9kICAgICAgICAgICAgICAgICAgICAgICAgICAgTkxNSU5CXG4gIE51bWJlciBvZiBmcmVlIHBhcmFtZXRlcnMgICAgICAgICAgICAgICAgICAgICAgICAgMTdcblxuICBOdW1iZXIgb2Ygb2JzZXJ2YXRpb25zICAgICAgICAgICAgICAgICAgICAgICAgICAgOTMyXG5cbiAgRXN0aW1hdG9yICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNTFxuICBNb2RlbCBGaXQgVGVzdCBTdGF0aXN0aWMgICAgICAgICAgICAgICAgICAgICAgIDQuNzM1XG4gIERlZ3JlZXMgb2YgZnJlZWRvbSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDRcbiAgUC12YWx1ZSAoQ2hpLXNxdWFyZSkgICAgICAgICAgICAgICAgICAgICAgICAgICAwLjMxNlxuXG5Nb2RlbCB0ZXN0IGJhc2VsaW5lIG1vZGVsOlxuXG4gIE1pbmltdW0gRnVuY3Rpb24gVGVzdCBTdGF0aXN0aWMgICAgICAgICAgICAgMjEzMy43MjJcbiAgRGVncmVlcyBvZiBmcmVlZG9tICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxNVxuICBQLXZhbHVlICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwXG5cblVzZXIgbW9kZWwgdmVyc3VzIGJhc2VsaW5lIG1vZGVsOlxuXG4gIENvbXBhcmF0aXZlIEZpdCBJbmRleCAoQ0ZJKSAgICAgICAgICAgICAgICAgICAgMS4wMDBcbiAgVHVja2VyLUxld2lzIEluZGV4IChUTEkpICAgICAgICAgICAgICAgICAgICAgICAwLjk5OVxuXG5Mb2dsaWtlbGlob29kIGFuZCBJbmZvcm1hdGlvbiBDcml0ZXJpYTpcblxuICBMb2dsaWtlbGlob29kIHVzZXIgbW9kZWwgKEgwKSAgICAgICAgICAgICAtMTUyMTMuMjc0XG4gIExvZ2xpa2VsaWhvb2QgdW5yZXN0cmljdGVkIG1vZGVsIChIMSkgICAgIC0xNTIxMC45MDZcblxuICBOdW1iZXIgb2YgZnJlZSBwYXJhbWV0ZXJzICAgICAgICAgICAgICAgICAgICAgICAgIDE3XG4gIEFrYWlrZSAoQUlDKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzMDQ2MC41NDhcbiAgQmF5ZXNpYW4gKEJJQykgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDMwNTQyLjc4M1xuICBTYW1wbGUtc2l6ZSBhZGp1c3RlZCBCYXllc2lhbiAoQklDKSAgICAgICAgMzA0ODguNzkyXG5cblJvb3QgTWVhbiBTcXVhcmUgRXJyb3Igb2YgQXBwcm94aW1hdGlvbjpcblxuICBSTVNFQSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE0XG4gIDkwIFBlcmNlbnQgQ29uZmlkZW5jZSBJbnRlcnZhbCAgICAgICAgICAwLjAwMCAgMC4wNTNcbiAgUC12YWx1ZSBSTVNFQSA8PSAwLjA1ICAgICAgICAgICAgICAgICAgICAgICAgICAwLjkzMFxuXG5TdGFuZGFyZGl6ZWQgUm9vdCBNZWFuIFNxdWFyZSBSZXNpZHVhbDpcblxuICBTUk1SICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA3XG5cblBhcmFtZXRlciBFc3RpbWF0ZXM6XG5cbiAgSW5mb3JtYXRpb24gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFeHBlY3RlZFxuICBJbmZvcm1hdGlvbiBzYXR1cmF0ZWQgKGgxKSBtb2RlbCAgICAgICAgICBTdHJ1Y3R1cmVkXG4gIFN0YW5kYXJkIEVycm9ycyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU3RhbmRhcmRcblxuTGF0ZW50IFZhcmlhYmxlczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KSAgIFN0ZC5sdiAgU3RkLmFsbFxuICBzZXMgPX4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgZWR1Y2F0aW9uICAgICAgICAgMS4wMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMi42MDcgICAgMC44NDJcbiAgICBzZWkgICAgICAgICAgICAgICA1LjIxOSAgICAwLjQyMiAgIDEyLjM2NCAgICAwLjAwMCAgIDEzLjYwOSAgICAwLjY0MlxuICBhbGllbjY3ID1+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgYW5vbWlhNjcgICAgICAgICAgMS4wMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMi42NjMgICAgMC43NzRcbiAgICBwb3dlcmxlc3M2NyAgICAgICAwLjk3OSAgICAwLjA2MiAgIDE1Ljg5NSAgICAwLjAwMCAgICAyLjYwNiAgICAwLjg1MlxuICBhbGllbjcxID1+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgYW5vbWlhNzEgICAgICAgICAgMS4wMDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMi44NTAgICAgMC44MDVcbiAgICBwb3dlcmxlc3M3MSAgICAgICAwLjkyMiAgICAwLjA1OSAgIDE1LjQ5OCAgICAwLjAwMCAgICAyLjYyOCAgICAwLjgzMlxuXG5SZWdyZXNzaW9uczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KSAgIFN0ZC5sdiAgU3RkLmFsbFxuICBhbGllbjcxIH4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgYWxpZW42NyAgIChhYSkgICAgMC42MDcgICAgMC4wNTEgICAxMS44OTggICAgMC4wMDAgICAgMC41NjcgICAgMC41NjdcbiAgICBzZXMgICAgICAgICAgICAgIC0wLjIyNyAgICAwLjA1MiAgIC00LjMzNCAgICAwLjAwMCAgIC0wLjIwNyAgIC0wLjIwN1xuICBhbGllbjY3IH4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgc2VzICAgICAgIChzYSkgICAtMC41NzUgICAgMC4wNTYgIC0xMC4xOTUgICAgMC4wMDAgICAtMC41NjMgICAtMC41NjNcblxuQ292YXJpYW5jZXM6XG4gICAgICAgICAgICAgICAgICAgRXN0aW1hdGUgIFN0ZC5FcnIgIHotdmFsdWUgIFAoPnx6fCkgICBTdGQubHYgIFN0ZC5hbGxcbiAuYW5vbWlhNjcgfn4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgLmFub21pYTcxICAgICAgICAgIDEuNjIzICAgIDAuMzE0ICAgIDUuMTc2ICAgIDAuMDAwICAgIDEuNjIzICAgIDAuMzU2XG4gLnBvd2VybGVzczY3IH5+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgIC5wb3dlcmxlc3M3MSAgICAgICAwLjMzOSAgICAwLjI2MSAgICAxLjI5OCAgICAwLjE5NCAgICAwLjMzOSAgICAwLjEyMVxuXG5WYXJpYW5jZXM6XG4gICAgICAgICAgICAgICAgICAgRXN0aW1hdGUgIFN0ZC5FcnIgIHotdmFsdWUgIFAoPnx6fCkgICBTdGQubHYgIFN0ZC5hbGxcbiAgIC5lZHVjYXRpb24gICAgICAgICAyLjgwMSAgICAwLjUwNyAgICA1LjUyNSAgICAwLjAwMCAgICAyLjgwMSAgICAwLjI5MlxuICAgLnNlaSAgICAgICAgICAgICAyNjQuNTk3ICAgMTguMTI2ICAgMTQuNTk3ICAgIDAuMDAwICAyNjQuNTk3ICAgIDAuNTg4XG4gICAuYW5vbWlhNjcgICAgICAgICAgNC43MzEgICAgMC40NTMgICAxMC40NDEgICAgMC4wMDAgICAgNC43MzEgICAgMC40MDBcbiAgIC5wb3dlcmxlc3M2NyAgICAgICAyLjU2MyAgICAwLjQwMyAgICA2LjM1OSAgICAwLjAwMCAgICAyLjU2MyAgICAwLjI3NFxuICAgLmFub21pYTcxICAgICAgICAgIDQuMzk5ICAgIDAuNTE1ICAgIDguNTQyICAgIDAuMDAwICAgIDQuMzk5ICAgIDAuMzUxXG4gICAucG93ZXJsZXNzNzEgICAgICAgMy4wNzAgICAgMC40MzQgICAgNy4wNzAgICAgMC4wMDAgICAgMy4wNzAgICAgMC4zMDhcbiAgICBzZXMgICAgICAgICAgICAgICA2Ljc5OCAgICAwLjY0OSAgIDEwLjQ3NSAgICAwLjAwMCAgICAxLjAwMCAgICAxLjAwMFxuICAgLmFsaWVuNjcgICAgICAgICAgIDQuODQxICAgIDAuNDY3ICAgMTAuMzU5ICAgIDAuMDAwICAgIDAuNjgzICAgIDAuNjgzXG4gICAuYWxpZW43MSAgICAgICAgICAgNC4wODMgICAgMC40MDQgICAxMC4xMDQgICAgMC4wMDAgICAgMC41MDMgICAgMC41MDNcblxuUi1TcXVhcmU6XG4gICAgICAgICAgICAgICAgICAgRXN0aW1hdGVcbiAgICBlZHVjYXRpb24gICAgICAgICAwLjcwOFxuICAgIHNlaSAgICAgICAgICAgICAgIDAuNDEyXG4gICAgYW5vbWlhNjcgICAgICAgICAgMC42MDBcbiAgICBwb3dlcmxlc3M2NyAgICAgICAwLjcyNlxuICAgIGFub21pYTcxICAgICAgICAgIDAuNjQ5XG4gICAgcG93ZXJsZXNzNzEgICAgICAgMC42OTJcbiAgICBhbGllbjY3ICAgICAgICAgICAwLjMxN1xuICAgIGFsaWVuNzEgICAgICAgICAgIDAuNDk3XG5cbkRlZmluZWQgUGFyYW1ldGVyczpcbiAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLkVyciAgei12YWx1ZSAgUCg+fHp8KSAgIFN0ZC5sdiAgU3RkLmFsbFxuICAgIEluZGlyZWN0RWZmZWN0ICAgLTAuMzQ5ICAgIDAuMDQxICAgLTguNTM4ICAgIDAuMDAwICAgLTAuMzE5ICAgLTAuMzE5XG4ifQ== -->
 <pre><code>lavaan 0.6-3 ended normally after 84 iterations
 
   Optimization method                           NLMINB
@@ -1893,6 +1906,37 @@ $(document).ready(function () {
   Degrees of freedom                                 4
   P-value (Chi-square)                           0.316
 
+Model test baseline model:
+
+  Minimum Function Test Statistic             2133.722
+  Degrees of freedom                                15
+  P-value                                        0.000
+
+User model versus baseline model:
+
+  Comparative Fit Index (CFI)                    1.000
+  Tucker-Lewis Index (TLI)                       0.999
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)             -15213.274
+  Loglikelihood unrestricted model (H1)     -15210.906
+
+  Number of free parameters                         17
+  Akaike (AIC)                               30460.548
+  Bayesian (BIC)                             30542.783
+  Sample-size adjusted Bayesian (BIC)        30488.792
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.014
+  90 Percent Confidence Interval          0.000  0.053
+  P-value RMSEA &lt;= 0.05                          0.930
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.007
+
 Parameter Estimates:
 
   Information                                 Expected
@@ -1900,50 +1944,64 @@ Parameter Estimates:
   Standard Errors                             Standard
 
 Latent Variables:
-                   Estimate  Std.Err  z-value  P(&gt;|z|)
-  ses =~                                              
-    education         1.000                           
-    sei               5.219    0.422   12.364    0.000
-  alien67 =~                                          
-    anomia67          1.000                           
-    powerless67       0.979    0.062   15.895    0.000
-  alien71 =~                                          
-    anomia71          1.000                           
-    powerless71       0.922    0.059   15.498    0.000
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  ses =~                                                                
+    education         1.000                               2.607    0.842
+    sei               5.219    0.422   12.364    0.000   13.609    0.642
+  alien67 =~                                                            
+    anomia67          1.000                               2.663    0.774
+    powerless67       0.979    0.062   15.895    0.000    2.606    0.852
+  alien71 =~                                                            
+    anomia71          1.000                               2.850    0.805
+    powerless71       0.922    0.059   15.498    0.000    2.628    0.832
 
 Regressions:
-                   Estimate  Std.Err  z-value  P(&gt;|z|)
-  alien71 ~                                           
-    alien67   (aa)    0.607    0.051   11.898    0.000
-    ses              -0.227    0.052   -4.334    0.000
-  alien67 ~                                           
-    ses       (sa)   -0.575    0.056  -10.195    0.000
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  alien71 ~                                                             
+    alien67   (aa)    0.607    0.051   11.898    0.000    0.567    0.567
+    ses              -0.227    0.052   -4.334    0.000   -0.207   -0.207
+  alien67 ~                                                             
+    ses       (sa)   -0.575    0.056  -10.195    0.000   -0.563   -0.563
 
 Covariances:
-                   Estimate  Std.Err  z-value  P(&gt;|z|)
- .anomia67 ~~                                         
-   .anomia71          1.623    0.314    5.176    0.000
- .powerless67 ~~                                      
-   .powerless71       0.339    0.261    1.298    0.194
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+ .anomia67 ~~                                                           
+   .anomia71          1.623    0.314    5.176    0.000    1.623    0.356
+ .powerless67 ~~                                                        
+   .powerless71       0.339    0.261    1.298    0.194    0.339    0.121
 
 Variances:
-                   Estimate  Std.Err  z-value  P(&gt;|z|)
-   .education         2.801    0.507    5.525    0.000
-   .sei             264.597   18.126   14.597    0.000
-   .anomia67          4.731    0.453   10.441    0.000
-   .powerless67       2.563    0.403    6.359    0.000
-   .anomia71          4.399    0.515    8.542    0.000
-   .powerless71       3.070    0.434    7.070    0.000
-    ses               6.798    0.649   10.475    0.000
-   .alien67           4.841    0.467   10.359    0.000
-   .alien71           4.083    0.404   10.104    0.000
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .education         2.801    0.507    5.525    0.000    2.801    0.292
+   .sei             264.597   18.126   14.597    0.000  264.597    0.588
+   .anomia67          4.731    0.453   10.441    0.000    4.731    0.400
+   .powerless67       2.563    0.403    6.359    0.000    2.563    0.274
+   .anomia71          4.399    0.515    8.542    0.000    4.399    0.351
+   .powerless71       3.070    0.434    7.070    0.000    3.070    0.308
+    ses               6.798    0.649   10.475    0.000    1.000    1.000
+   .alien67           4.841    0.467   10.359    0.000    0.683    0.683
+   .alien71           4.083    0.404   10.104    0.000    0.503    0.503
+
+R-Square:
+                   Estimate
+    education         0.708
+    sei               0.412
+    anomia67          0.600
+    powerless67       0.726
+    anomia71          0.649
+    powerless71       0.692
+    alien67           0.317
+    alien71           0.497
 
 Defined Parameters:
-                   Estimate  Std.Err  z-value  P(&gt;|z|)
-    IndirectEffect   -0.349    0.041   -8.538    0.000</code></pre>
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+    IndirectEffect   -0.349    0.041   -8.538    0.000   -0.319   -0.319</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>The only difference here is that we have regression parameters to interpret, but they are interpreted like any other, and in this case represent the relationship of one latent variable to others. In this case we have a fairly stable estimate from the earlier values of <code>alienation</code> to the subsequent ones, and a negative relationship of <code>ses</code> to both, meaning that the better off you are socially and economically, the less alienated you will feel.</p>
+<p>Additionally, we have residual correlations for the same measures at the two time points, as well as (residual) variance estimates. We might be interested in the R-Square for the alienation latent variables.</p>
+<p>We also have an indirect effect here, and the code provides a simple way to calculate its significance (this is not always the correct way to do it depending on the model). The interpretation here is that <code>ses</code> affects alienation both directly and through its previous effects.</p>
 </div>
 <div id="some-common-sems-with-latent-variables" class="section level2">
 <h2>Some Common SEMs with Latent Variables</h2>
@@ -1956,7 +2014,7 @@ Defined Parameters:
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlN0cnVjdHVyYWwgRXF1YXRpb24gTW9kZWxpbmciDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOiANCiAgICBjb2RlX2ZvbGRpbmc6IG5vbmUNCiAgICBoaWdobGlnaHQ6IHB5Z21lbnRzDQogICAgdGhlbWU6IHNhbmRzdG9uZQ0KZWRpdG9yX29wdGlvbnM6IA0KICBjaHVuX291dHB1dF90eXBlOiBpbmxpbmUNCi0tLQ0KDQoNCiMjIEluaXRpYWxpemF0aW9uDQoNClRoaXMgYXNzdW1lcyB0aGUgcHJpb3IgUm1kIGZpbGVzIGhhdmUgYmVlbiBydW4uICBTZWUgdGhlIFJFQURNRSBmaWxlLg0KDQpgYGB7ciBtaXNjX2Z1bmN0aW9uc30NCnNvdXJjZSgnZnVuY3Rpb25zX3NjcmlwdHMvZnVuY3Rpb25zLlInKQ0KYGBgDQoNCmBgYHtyIGxvYWRfcGFjYWdlcywgbWVzc2FnZT1GQUxTRX0NCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShwc3ljaCkNCmxpYnJhcnkobGF2YWFuKQ0KYGBgDQoNCiMjIFNFTQ0KDQpOb3cgbGV0J3MgbW92ZSBvbiB0byBhIGZ1bGwgYmxvd24gU0VNLiBUaGUgZm9sbG93aW5nIG1vZGVsIGlzIGEgY2xhc3NpYyBleGFtcGxlIGZyb20gV2hlYXRvbiBldCBhbC4gKDE5NzcpLCB3aGljaCB1c2VkIGxvbmdpdHVkaW5hbCBkYXRhIHRvIGRldmVsb3AgYSBtb2RlbCBvZiB0aGUgc3RhYmlsaXR5IG9mIGFsaWVuYXRpb24gZnJvbSAxOTY3IHRvIDE5NzEsIGFjY291bnRpbmcgZm9yIHNvY2lvZWNvbm9taWMgc3RhdHVzIGFzIGEgY292YXJpYXRlLiBFYWNoIG9mIHRoZSB0aHJlZSBmYWN0b3JzIGhhdmUgdHdvIGluZGljYXRvciB2YXJpYWJsZXMsIFNFUyBpbiAxOTY2IGlzIG1lYXN1cmVkIGJ5IGVkdWNhdGlvbiBhbmQgb2NjdXBhdGlvbmFsIHN0YXR1cyBpbiAxOTY2IGFuZCBhbGllbmF0aW9uIGluIGJvdGggeWVhcnMgaXMgbWVhc3VyZWQgYnkgcG93ZXJsZXNzbmVzcyBhbmQgYW5vbWllIChhIGZlZWxpbmcgb2YgYmVpbmcgbG9zdCB3aXRoIHJlZ2FyZCB0byBzb2NpZXR5KS4gVGhlIHN0cnVjdHVyYWwgY29tcG9uZW50IG9mIHRoZSBtb2RlbCBoeXBvdGhlc2l6ZXMgdGhhdCBTRVMgaW4gMTk2NiBpbmZsdWVuY2VzIGJvdGggYWxpZW5hdGlvbiBpbiAxOTY3IGFuZCAxOTcxIGFuZCBhbGllbmF0aW9uIGluIDE5NjcgaW5mbHVlbmNlcyB0aGUgc2FtZSBtZWFzdXJlIGluIDE5NzEuICBXZSBhbHNvIGxldCB0aGUgZGlzdHVyYmFuY2VzIGNvcnJlbGF0ZSBmcm9tIG9uZSB0aW1lIHBvaW50IHRvIHRoZSBuZXh0Lg0KDQpgYGB7ciBzZW1fd2hlYXRvbn0NCiMgSW4gdGhpcyBleGFtcGxlIHdlIGltcG9ydCB0aGUgY292YXJpYW5jZSBtYXRyaXgNCndoZWF0b24uY292ID0gYXMubWF0cml4KHJlYWQuY3N2KCdkYXRhL3doZWF0b25fY292LmNzdicsIHJvdy5uYW1lcz0xKSkNCg0KIyB0aGUgbW9kZWwNCndoZWF0b24ubW9kZWwgPSAnDQogICMgbWVhc3VyZW1lbnQgbW9kZWwNCiAgICBzZXMgICAgID1+IGVkdWNhdGlvbiArIHNlaQ0KICAgIGFsaWVuNjcgPX4gYW5vbWlhNjcgKyBwb3dlcmxlc3M2Nw0KICAgIGFsaWVuNzEgPX4gYW5vbWlhNzEgKyBwb3dlcmxlc3M3MQ0KIA0KICAjIHN0cnVjdHVyYWwgbW9kZWwNCiAgICBhbGllbjcxIH4gYWEqYWxpZW42NyArIHNlcw0KICAgIGFsaWVuNjcgfiBzYSpzZXMNCiANCiAgIyBjb3JyZWxhdGVkIHJlc2lkdWFscw0KICAgIGFub21pYTY3IH5+IGFub21pYTcxDQogICAgcG93ZXJsZXNzNjcgfn4gcG93ZXJsZXNzNzENCg0KICAjIEluZGlyZWN0IGVmZmVjdA0KICAgIEluZGlyZWN0RWZmZWN0IDo9IHNhKmFhDQonDQoNCmFsaWVuYXRpb24gPC0gc2VtKHdoZWF0b24ubW9kZWwsIHNhbXBsZS5jb3Y9d2hlYXRvbi5jb3YsIHNhbXBsZS5ub2JzPTkzMikNCnN1bW1hcnkoYWxpZW5hdGlvbikNCmBgYA0KDQoNCiMjIFNvbWUgQ29tbW9uIFNFTXMgd2l0aCBMYXRlbnQgVmFyaWFibGVzDQoNCi0gSGllcmFyY2hpY2FsIENGQTogaGlnaGVyIG9yZGVyIENGQQ0KLSBHcm93dGggQ3VydmUgTW9kZWw6IGxvbmdpdHVkaW5hbCBkYXRhDQotIExhdGVudCBDbGFzc2VzOiBjYXRlZ29yaWNhbCBsYXRlbnQgdmFyaWFibGVzDQotIE1lYXN1cmVtZW50IEludmFyaWFuY2U6IHNjYWxlIGRldmVsb3BtZW50IGFjcm9zcyBkaWZmZXJlbnQgcG9wdWxhdGlvbnM=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU3RydWN0dXJhbCBFcXVhdGlvbiBNb2RlbGluZyIKb3V0cHV0OiAKICBodG1sX25vdGVib29rOiAKICAgICNjb2RlX2ZvbGRpbmc6IG5vbmUKICAgIGhpZ2hsaWdodDogcHlnbWVudHMKICAgIHRoZW1lOiBzYW5kc3RvbmUKZWRpdG9yX29wdGlvbnM6IAogIGNodW5fb3V0cHV0X3R5cGU6IGlubGluZQogIGNodW5rX291dHB1dF90eXBlOiBpbmxpbmUKLS0tCgoKIyMgSW5pdGlhbGl6YXRpb24KClRoaXMgYXNzdW1lcyB0aGUgcHJpb3IgUm1kIGZpbGVzIGhhdmUgYmVlbiBydW4uICBTZWUgdGhlIFJFQURNRSBmaWxlLgoKYGBge3IgbWlzY19mdW5jdGlvbnN9CnNvdXJjZSgnZnVuY3Rpb25zX3NjcmlwdHMvZnVuY3Rpb25zLlInKQpgYGAKCmBgYHtyIGxvYWRfcGFjYWdlcywgbWVzc2FnZT1GQUxTRX0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkocHN5Y2gpCmxpYnJhcnkobGF2YWFuKQpgYGAKCiMjIFNFTQoKTm93IGxldCdzIG1vdmUgb24gdG8gYSBmdWxsIGJsb3duIFNFTS4gVGhlIGZvbGxvd2luZyBtb2RlbCBpcyBhIGNsYXNzaWMgZXhhbXBsZSBmcm9tIFdoZWF0b24gZXQgYWwuICgxOTc3KSwgd2hpY2ggdXNlZCBsb25naXR1ZGluYWwgZGF0YSB0byBkZXZlbG9wIGEgbW9kZWwgb2YgdGhlIHN0YWJpbGl0eSBvZiBhbGllbmF0aW9uIGZyb20gMTk2NyB0byAxOTcxLCBhY2NvdW50aW5nIGZvciBzb2Npb2Vjb25vbWljIHN0YXR1cyBhcyBhIGNvdmFyaWF0ZS4gRWFjaCBvZiB0aGUgdGhyZWUgZmFjdG9ycyBoYXZlIHR3byBpbmRpY2F0b3IgdmFyaWFibGVzLCBTRVMgaW4gMTk2NiBpcyBtZWFzdXJlZCBieSBlZHVjYXRpb24gYW5kIG9jY3VwYXRpb25hbCBzdGF0dXMgaW4gMTk2NiBhbmQgYWxpZW5hdGlvbiBpbiBib3RoIHllYXJzIGlzIG1lYXN1cmVkIGJ5IHBvd2VybGVzc25lc3MgYW5kIGFub21pZSAoYSBmZWVsaW5nIG9mIGJlaW5nIGxvc3Qgd2l0aCByZWdhcmQgdG8gc29jaWV0eSkuIFRoZSBzdHJ1Y3R1cmFsIGNvbXBvbmVudCBvZiB0aGUgbW9kZWwgaHlwb3RoZXNpemVzIHRoYXQgU0VTIGluIDE5NjYgaW5mbHVlbmNlcyBib3RoIGFsaWVuYXRpb24gaW4gMTk2NyBhbmQgMTk3MSBhbmQgYWxpZW5hdGlvbiBpbiAxOTY3IGluZmx1ZW5jZXMgdGhlIHNhbWUgbWVhc3VyZSBpbiAxOTcxLiAgV2UgYWxzbyBsZXQgdGhlIGRpc3R1cmJhbmNlcyBjb3JyZWxhdGUgZnJvbSBvbmUgdGltZSBwb2ludCB0byB0aGUgbmV4dC4KCmBgYHtyIHNlbV93aGVhdG9ufQojIEluIHRoaXMgZXhhbXBsZSB3ZSBpbXBvcnQgdGhlIGNvdmFyaWFuY2UgbWF0cml4CndoZWF0b24uY292ID0gYXMubWF0cml4KHJlYWQuY3N2KCdkYXRhL3doZWF0b25fY292LmNzdicsIHJvdy5uYW1lcz0xKSkKCiMgdGhlIG1vZGVsCndoZWF0b24ubW9kZWwgPSAnCiAgIyBtZWFzdXJlbWVudCBtb2RlbAogICAgc2VzICAgICA9fiBlZHVjYXRpb24gKyBzZWkKICAgIGFsaWVuNjcgPX4gYW5vbWlhNjcgKyBwb3dlcmxlc3M2NwogICAgYWxpZW43MSA9fiBhbm9taWE3MSArIHBvd2VybGVzczcxCiAKICAjIHN0cnVjdHVyYWwgbW9kZWwKICAgIGFsaWVuNzEgfiBhYSphbGllbjY3ICsgc2VzCiAgICBhbGllbjY3IH4gc2Eqc2VzCiAKICAjIGNvcnJlbGF0ZWQgcmVzaWR1YWxzCiAgICBhbm9taWE2NyB+fiBhbm9taWE3MQogICAgcG93ZXJsZXNzNjcgfn4gcG93ZXJsZXNzNzEKCiAgIyBJbmRpcmVjdCBlZmZlY3QKICAgIEluZGlyZWN0RWZmZWN0IDo9IHNhKmFhCicKCmFsaWVuYXRpb24gPC0gc2VtKHdoZWF0b24ubW9kZWwsIHNhbXBsZS5jb3Y9d2hlYXRvbi5jb3YsIHNhbXBsZS5ub2JzPTkzMikKc3VtbWFyeShhbGllbmF0aW9uLCBmaXQ9VCwgcnNxPVQsIHN0ZD1UKQpgYGAKClRoZSBvbmx5IGRpZmZlcmVuY2UgaGVyZSBpcyB0aGF0IHdlIGhhdmUgcmVncmVzc2lvbiBwYXJhbWV0ZXJzIHRvIGludGVycHJldCwgYnV0IHRoZXkgYXJlIGludGVycHJldGVkIGxpa2UgYW55IG90aGVyLCBhbmQgaW4gdGhpcyBjYXNlIHJlcHJlc2VudCB0aGUgcmVsYXRpb25zaGlwIG9mIG9uZSBsYXRlbnQgdmFyaWFibGUgdG8gb3RoZXJzLiAgSW4gdGhpcyBjYXNlIHdlIGhhdmUgYSBmYWlybHkgc3RhYmxlIGVzdGltYXRlIGZyb20gdGhlIGVhcmxpZXIgdmFsdWVzIG9mIGBhbGllbmF0aW9uYCB0byB0aGUgc3Vic2VxdWVudCBvbmVzLCBhbmQgYSBuZWdhdGl2ZSByZWxhdGlvbnNoaXAgb2YgYHNlc2AgdG8gYm90aCwgbWVhbmluZyB0aGF0IHRoZSBiZXR0ZXIgb2ZmIHlvdSBhcmUgc29jaWFsbHkgYW5kIGVjb25vbWljYWxseSwgdGhlIGxlc3MgYWxpZW5hdGVkIHlvdSB3aWxsIGZlZWwuCgpBZGRpdGlvbmFsbHksIHdlIGhhdmUgcmVzaWR1YWwgY29ycmVsYXRpb25zIGZvciB0aGUgc2FtZSBtZWFzdXJlcyBhdCB0aGUgdHdvIHRpbWUgcG9pbnRzLCBhcyB3ZWxsIGFzIChyZXNpZHVhbCkgdmFyaWFuY2UgZXN0aW1hdGVzLiAgV2UgbWlnaHQgYmUgaW50ZXJlc3RlZCBpbiB0aGUgUi1TcXVhcmUgZm9yIHRoZSBhbGllbmF0aW9uIGxhdGVudCB2YXJpYWJsZXMuCgpXZSBhbHNvIGhhdmUgYW4gaW5kaXJlY3QgZWZmZWN0IGhlcmUsIGFuZCB0aGUgY29kZSBwcm92aWRlcyBhIHNpbXBsZSB3YXkgdG8gY2FsY3VsYXRlIGl0cyBzaWduaWZpY2FuY2UgKHRoaXMgaXMgbm90IGFsd2F5cyB0aGUgY29ycmVjdCB3YXkgdG8gZG8gaXQgZGVwZW5kaW5nIG9uIHRoZSBtb2RlbCkuICBUaGUgaW50ZXJwcmV0YXRpb24gaGVyZSBpcyB0aGF0ICBgc2VzYCBhZmZlY3RzIGFsaWVuYXRpb24gYm90aCBkaXJlY3RseSBhbmQgdGhyb3VnaCBpdHMgcHJldmlvdXMgZWZmZWN0cy4KCgojIyBTb21lIENvbW1vbiBTRU1zIHdpdGggTGF0ZW50IFZhcmlhYmxlcwoKLSBIaWVyYXJjaGljYWwgQ0ZBOiBoaWdoZXIgb3JkZXIgQ0ZBCi0gR3Jvd3RoIEN1cnZlIE1vZGVsOiBsb25naXR1ZGluYWwgZGF0YQotIExhdGVudCBDbGFzc2VzOiBjYXRlZ29yaWNhbCBsYXRlbnQgdmFyaWFibGVzCi0gTWVhc3VyZW1lbnQgSW52YXJpYW5jZTogc2NhbGUgZGV2ZWxvcG1lbnQgYWNyb3NzIGRpZmZlcmVudCBwb3B1bGF0aW9ucw==</div>
 
 
 
