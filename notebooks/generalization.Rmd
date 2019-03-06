@@ -1,0 +1,26 @@
+---
+title: "Generalization"
+output: 
+  html_notebook: 
+    code_folding: none
+    highlight: pygments
+    theme: sandstone
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Generalizing latent variables
+
+Latent variables are used very widely in a variety of contexts.  Here are some examples.
+
+- Dimension reduction (as demonstrated)
+- Discovering latent constructs (as demonstrated)
+- Scale development (as demonstrated)
+- Utilizing random effects (mixed models)
+- Ability assessment (item response theory)
+- Exploring latent categorical variables/models (cluster analysis/mixture models)
+- Making recommendations (recommender systems)
+- Latent state transitions over time (hidden markov models)
+- Discovering latent topics in text (topic modeling)
+
+And many, many more.  See this [document](https://m-clark.github.io/docs/FA_notes.html) for some examples.
