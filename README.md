@@ -7,10 +7,10 @@ For those in the workshop, after downloading this [repo](https://github.com/m-cl
 
 The order of the notebooks.  Note that code in subsequent files assumes that previous files have had all the code run and those objects are in the current R environment.  In other words, only the first file should be considered standalone.
 
-- introduction
+- Introduction
 - Principal Components Analysis
 - Factor Analysis I
 - Factor Analysis II
 - Scale Reliability
-- Latent Variables More Generally and SEM
-- Exercises
+- SEM
+- Generalization
