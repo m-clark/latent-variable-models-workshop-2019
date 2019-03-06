@@ -28,7 +28,7 @@ Principal components analysis (PCA) is the most widely used technique for dimens
 
 $$X = F\Lambda'$$
 
-Alternatively, we can think of reconstructing the correlation matrix.  In this case, the correlation matrix $R$ can be perfectly reconstructed with by the loading matrix.
+Alternatively, we can think of reconstructing the correlation matrix.  In this case, the correlation matrix $R$ can be perfectly reconstructed with by the loading matrix for all components.
 
 $$ R = \Lambda\Lambda'$$
 

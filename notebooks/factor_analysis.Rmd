@@ -99,17 +99,22 @@ Now in terms of the correlation matrix.  The $\Psi$ are the uniquenesses, or var
 $$R \approx \Lambda\Lambda' \\
 R = \Lambda\Lambda' + \Psi$$
 
-In terms of the multivariate normal distribution.
+
+In terms of the multivariate normal distribution:
 
 $$ X \sim \mathcal{N}(F\Lambda' + \mu, \Psi) $$
-$\mu$ are the intercepts, $\Psi$ is a $DxD$ covariance matrix.
+$\mu$ are the intercepts, $\Psi$ is a $DxD$ covariance matrix, with unique variances for each individual variable belonging to $X$ (and potentially residual covariances among the $X$).
 
 
 #### Probabilistic PCA
 
+Probabilistic PCA is a viable but not as commonly used variant.  One can see it as a restrictive form of factor analysis, where the variances of the items are constant.
+
 $$\Psi = \sigma^2I$$
 
 #### Standard PCA
+
+Standard PCA is an even more extreme
 
 With standard PCA we are assuming a noiseless process, and constraining $\Lambda$ to be orthogonal.
 
@@ -117,20 +122,60 @@ $$\sigma^2 \rightarrow 0$$
 
 ## Multiple Factors
 
-> 16 multiple choice ability items 1525 subjects taken from the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project are saved as iqitems. Those data are shown as examples of how to score multiple choice tests and analyses of response alternatives. When scored correct or incorrect, the data are useful for demonstrations of tetrachoric based factor analysis irt.fa and finding tetrachoric correlations.
+Often we want to explore more than one factor. We'll use the `ability` data from the `psych` package to demonstrate this.
 
-```{r}
+> 1525 subjects. Items are taken from the Synthetic Aperture Personality Assessment (SAPA) web based personality assessment project. 16 multiple choice ability items were sampled from 80 items given as part of the SAPA (https://sapa-project.org) project (Revelle, Wilt and Rosenthal, 2009; Condon and Revelle, 2014) to develop online measures of ability. 
+
+They are broken down as follows:
+
+- Basic reasoning
+- Letter sequence
+- Matrix reasoning
+- Spatial rotation tasks
+
+We will ignore the fact that these are binary for our purposes, but it really doesn't matter all that much in the grand scheme of things anyway.
+
+```{r ability}
 ability = as_tibble(ability)
 ability
 ```
-```{r}
-fa_ability = fa(ability, 4)
+
+To allow for more than one factor, we specify the `nfactors` argument as desired.  Since we expect four factors, that's what we'll set the argument to.
+
+```{r fa_ability}
+fa_ability = fa(ability, nfactors = 4)
 fa_ability
 ```
 
-```{r}
+Interpretation is in general the same as with the single factor. Loadings give a sense of how an item correlates with a given factor (accounting for its correlation with other factors).  Let's look at it visually.  
+
+```{r fa_ability_vis}
 fa.diagram(fa_ability, sort = F)
 ```
 
 
 
+Perhaps a couple items are not so great, and if we were more stringent, we might not be okay with this.  However, the other fit measures suggest the model is viable.
+
+
+## Exercise
+
+Go back to the `bfi` data and examine different factor solutions. The following visualization shows our factor analysis solution versus what we would have gotten against randomly resampled or simulated data.  The idea is to retain the number of factors for a model with a statistically higher eigenvalue than the random data.
+
+Which one might you select?
+
+
+```{r exercise1}
+bfi_no_demo = bfi %>% select(-gender, -education, -age)
+fa.parallel(bfi_no_demo, fa = 'fa', error.bars = T)
+```
+
+
+If you are familiar with some of the measures of fit and model comparison, feel free to use this custom function to easily assess both internal fit and comparison of different analyses.
+
+```{r exercise2}
+nf = 1:8
+names(nf) = as.character(nf)
+
+model_comparison(nflist)
+```

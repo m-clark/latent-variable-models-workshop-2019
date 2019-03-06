@@ -28,18 +28,21 @@ library(broom)
 
 ## Structural Equation Modeling
 
-Structural Equation Modeling (SEM) takes a more structured approach to modeling observed and latent variables, often simultaneously, and including indirect effects, multiple outcomes in more.  Most any model you have conducted can be seen as a special case of SEM, but SEM tools are generally geared towards specific kinds of models.
+Structural Equation Modeling (SEM) takes a more theoretically based approach to modeling observed and latent variables than we have used thus far, and includes indirect effects, multiple outcomes, and more.  Most any model you have conducted can be seen as a special case of SEM, but SEM tools are generally geared towards specific kinds of models.
 
-## CFA
+## Latent Variable Modeling
 
-We can take a first step into the SEM by sticking with standard factor analysis.  In our previous example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge that tells us some variables should be more correlated with one another than others.
+We can take a first step into the SEM by sticking with standard factor analysis.  In our previous example we did a factor analysis for two factors of the BFI.  We will do so again here, but instead of letting every observed variable load on every factor, we will use our substantive knowledge that tells us some variables should be more correlated with one another than others. Some call this 'confirmatory factor analysis' as opposed to 'exploratory factor analysis', but this is not a very useful distinction in my opinion.  The CFA is just a reduced or constrained model relative to the EFA.  The EFA is more realistic (no loading is truly 0), but the CFA is cleaner and more easily interpreted.
 
-```{r}
+To run the following model we'll use `lavaan` and its `cfa` function.  We'll first reduce the `bfi` data to two item sets of agreeableness and neuroticism.  We'll also reverse score the items to get consistent/positive loadings.  The notebook may have problems displaying everything inline, so you may need to look to your console or preview to see all the output.
+
+```{r bfi_agree_neuro}
 bfi_agree_neuro = bfi %>% 
-  select(matches('A[1-5]|N[1-5]'))
+  select(matches('E[1-5]|N[1-5]')) %>% 
+  mutate(E2 = -E2, E1 = -E1)
 
 modelCode = "
-  agree  =~ A2 + A1 + A3 + A4 + A5
+  agree  =~ E1 + E2 + E3 + E4 + E5
   neurot =~ N1 + N2 + N3 + N4 + N5
 
   # specify correlated factors; not necessary
@@ -53,9 +56,9 @@ cfa_bfi = cfa(modelCode, data=bfi_agree_neuro)
 summary(cfa_bfi, standardized=T, rsq=T, fit=T, nd=2)
 ```
 
-### Basic Interpretation
 
-#### Common Measures of Fit
+
+### Common Measures of Fit
 
 There are many, many measures of model fit  when one moves to the SEM realm, and none of them will give you a definitive answer as to how your model is doing.  Your assessment, should be based on a holistic approach to get a global sense of how your model is doing.  Let's loo again at the alienation results.
 
@@ -63,7 +66,7 @@ What follows is a brief summary.
 
 
 ```{r cfa_fit}
-glance(cfa_bfi)
+glance(cfa_bfi) %>% mutate_if(is.numeric, round, digits = 2)
 ```
 
 
@@ -105,19 +108,26 @@ AIC(cfa_bfi)
 ```
 
 
-#### Loadings
+### Loadings
 
-Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and is interpreted as before.  For example, we see the negatively valued loading for the reverse-scored item, as well as it being the lowest loading item (not an uncommon occurrence).  Other loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism seems a better scale than agreeableness.
+Generally we report the standardized loadings, where both the latent variables and observed variables are standardized.  This is the `std.all` column, and these loadings are interpreted as before.  For example, we see the negatively valued loading for the reverse-scored item, as well as it being the lowest loading item (not an uncommon occurrence).  Other loadings seem more or less satisfactory by typical standards, but might be somewhat low for scale development.  In general, neuroticism seems a better scale than agreeableness.
 
 ```{r cfa_loadings}
-broom::tidy(cfa_bfi,) %>% 
+tidy(cfa_bfi) %>% 
   select(term, std.all) %>% 
   filter(grepl(term, pattern = 'agree =~ |neurot =~')) %>% 
   mutate(std.all = round(std.all, 2))
 ```
 
 
-#### Other
+### Other
 
-Aside from loadings and fit, we get the estimated correlations of the factors (`agree ~~ neurot`), the (residual) variances of the items and latent variables (`Variances`), and the average R-squared of each item explained by the factors (`R-Square`).
+Aside from loadings and fit, we get the estimated correlations of the factors (`agree ~~ neurot`), the (residual) variances of the items (the uniqueness from our previous approach) and latent variables (`Variances`), and the average R-squared of each item explained by the factors (`R-Square`).
 
+## Measurement Models First!
+
+If you do end up conducting SEM with latent variables for more complicated models, you still need to run the basic factor analyses, usually separately for each latent variable under consideration.  If things are not holding up well there, any analysis using them will not do well either.
+
+## No Double-Dipping
+
+Doing a reduced factor analysis after an exploratory one, and then only presenting the trimmed one as your main result is misleading and basically a sure way to overfit your data.  It would be okay if you do the reduced one on new data, but this unfortunately is very rarely done.

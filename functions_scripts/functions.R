@@ -103,3 +103,19 @@ load_label_file = function(filename) {
   close(f)
   y
 }
+
+
+model_comparison <- function(nflist, data = bfi_no_demo) {
+  map_df(nf, 
+         function(k) {
+           f <- fa(data, nfactors = k); 
+           c(f$RMSEA[1], 
+             f$rms, 
+             f$TLI, 
+             f$BIC)
+         }) %>% 
+    round(3) %>% 
+    mutate(stat = c('RMSEA', 'SRMR', 'TLI', 'BIC'),
+           use  = c('Internal', 'Internal', 'Internal', 'Comparison')) %>% 
+    select(stat, use, everything())
+}
